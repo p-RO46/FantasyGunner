@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "name": "CameraControllers",
+    "maps": [
+        {
+            "name": "Game Camera",
+            "id": "69758202-a8bd-426e-8443-2b1ece8ecac3",
+            "actions": [
+                {
+                    "name": "Rotate",
+                    "type": "Value",
+                    "id": "8b473075-541d-4796-bcb1-349ff0038fba",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "ec261e36-78fc-4ddb-96c4-e9780ffc37d1",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
