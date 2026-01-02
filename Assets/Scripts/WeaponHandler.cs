@@ -1,19 +1,34 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class WeaponHandler : MonoBehaviour
 {
     public WeaponData currentWeaponData;
+    public TextMeshProUGUI gunName;
+    public TextMeshProUGUI maxAmmo;
+    public TextMeshProUGUI curAmmo;
+
+    public int curBullet;
 
     public Camera cam;
     public float MaxDistance; //Ray의 사거리
     public GameObject fireParticle; // 할당할 파티클 프리팹
+
+    void Start()
+    {
+        curBullet = currentWeaponData.maxAmmo;
+        maxAmmo.text = currentWeaponData.maxAmmo.ToString();
+        curAmmo.text = currentWeaponData.maxAmmo.ToString();
+    }
 
     public void OnFire(InputAction.CallbackContext context)
     {
         if (context.started)
         {
             ShootRay();
+            curBullet--;
+            curAmmo.text = curBullet.ToString();
         }
     }
 
@@ -31,11 +46,16 @@ public class WeaponHandler : MonoBehaviour
         //3.Ray 발사 (물리 충돌 체크)
         if(Physics.Raycast(ray,out hit, MaxDistance))
         {
+            GameObject hitObject = hit.collider.gameObject;
             GameObject effect = Instantiate(fireParticle, hit.point, Quaternion.LookRotation(hit.normal));
             
-            Debug.Log($"적중 대상: {hit.collider.gameObject.name}");
+            Debug.Log($"적중 대상: {hitObject.name}");
             Debug.Log($"적중 지점 좌표: {hit.point}");
 
+            if (hitObject.CompareTag("Enemy"))
+            {
+                hitObject.GetComponent<CharacterHandler>().attacked(currentWeaponData.damage);
+            }
             Destroy(effect, 2.0f);
         }
 

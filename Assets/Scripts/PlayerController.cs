@@ -35,9 +35,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 inputDir = new Vector3(moveInput.x, 0, moveInput.y);
+        //Vector3 inputDir = new Vector3(moveInput.x, 0, moveInput.y);
         //플레이어 방향으로 변환
-        Vector3 move = (transform.right * inputDir.x) + (transform.forward * inputDir.z);
+        Vector3 move = (transform.right * moveInput.x) + (transform.forward * moveInput.y);
         
         controller.Move(move * speed * Time.deltaTime);
 
