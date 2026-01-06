@@ -6,6 +6,7 @@ public class MonsterMove : MonoBehaviour
     Rigidbody rigid;
     public float moveSpeed = 2f;
     public int nextMove;
+    private bool dead = false;
 
     void Awake()
     {
@@ -16,8 +17,17 @@ public class MonsterMove : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector3 moveOffset = transform.forward * moveSpeed * Time.fixedDeltaTime * nextMove;
-        rigid.MovePosition(rigid.position + moveOffset);
+        if (!dead)
+        {
+            if (!GetComponent<CharacterHandler>().isAlive)
+            {
+                animator.SetBool("Alive", false);
+                CancelInvoke();
+                dead = true;
+            }
+            Vector3 moveOffset = transform.forward * moveSpeed * Time.fixedDeltaTime * nextMove;
+            rigid.MovePosition(rigid.position + moveOffset);
+        }
     }
     
     void Think()
@@ -27,7 +37,7 @@ public class MonsterMove : MonoBehaviour
         if(nextMove != 0)
         {
             float turnAngle = Random.Range(10.0f, 180.0f);
-            rigid.rotation = Quaternion.AngleAxis(turnAngle * nextMove, Vector3.up) * rigid.rotation; // ÁÂ¿ì È¸Àü
+            rigid.rotation = Quaternion.AngleAxis(turnAngle * nextMove, Vector3.up) * rigid.rotation; // ï¿½Â¿ï¿½ È¸ï¿½ï¿½
         }
         float nextThinkTime = Random.Range(2f, 5f);
         Invoke("Think", nextThinkTime);

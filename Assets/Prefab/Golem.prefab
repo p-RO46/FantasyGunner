@@ -206,6 +206,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -342,6 +343,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -518,8 +520,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.9, y: 2.3, z: 0.9}
-  m_Center: {x: 0, y: 1.15, z: -0.15}
+  m_Size: {x: 0.9, y: 2.3, z: 0.48402023}
+  m_Center: {x: 0, y: 1.15, z: 0.057989836}
 --- !u!136 &6061460734140856987
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -599,7 +601,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterMove
   moveSpeed: 2
-  turnAngle: 90
   nextMove: 0
 --- !u!4 &4232048854964649379 stripped
 Transform:

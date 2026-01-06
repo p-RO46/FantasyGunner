@@ -21,11 +21,11 @@ public class CharacterHandler : MonoBehaviour
     {
         if(HPchanged)
         {
+            updateHP();
             if (curHP == 0)
             {
-                isAlive = false;
+                isAlive = false; 
             }
-            updateHP();
         }
     }
 
@@ -37,7 +37,10 @@ public class CharacterHandler : MonoBehaviour
 
     private void updateHP()
     {
-        hpText.text = curHP.ToString();
-        HPchanged = false;
+        if(curHP  >= 0)
+        {
+            hpText.text = curHP.ToString();
+            HPchanged = false;
+        }
     }
 }

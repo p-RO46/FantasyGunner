@@ -15,6 +15,4 @@ MonoBehaviour:
   characterName: golem
   damage: 20
   speed: 5
-  maxHP: 1000
-  curHP: 860
-  isAlive: 1
+  maxHP: 100
