@@ -20,15 +20,15 @@ public class PlayerController : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
-        Debug.Log($"Move Input: {moveInput}");
+        //Debug.Log($"Move Input: {moveInput}");
     }
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        Debug.Log($"Jumping {context.performed} - Is Grounded: {controller.isGrounded}");
+        //Debug.Log($"Jumping {context.performed} - Is Grounded: {controller.isGrounded}");
         if(context.performed && controller.isGrounded)
         {
-            Debug.Log("We are supposed to jump");
+            //Debug.Log("We are supposed to jump");
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
     }
@@ -36,7 +36,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //Vector3 inputDir = new Vector3(moveInput.x, 0, moveInput.y);
-        //플레이어 방향으로 변환
         Vector3 move = (transform.right * moveInput.x) + (transform.forward * moveInput.y);
         
         controller.Move(move * speed * Time.deltaTime);
@@ -46,7 +45,6 @@ public class PlayerController : MonoBehaviour
 
     void ApplyGravity()
     {
-        //바닥에 닿아있을 떄 가속도가 무한히 쌓이는 것 방지
         if(controller.isGrounded && velocity.y < 0) 
         {
             velocity.y = -2f;

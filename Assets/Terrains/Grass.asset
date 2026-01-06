@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad25be505c211224ab991e9667f470eb, type: 3}
+  m_Name: Grass
+  m_EditorClassIdentifier: Assembly-CSharp::Terrain
+  Type: Grass
+  Walkable: 1
+  isEmpty: 0
+  Difficulty: 1
+  TerrainMaterial: {fileID: 2100000, guid: 48650bef82da5c04297fcb5e64b925c7, type: 2}
+  SpawnMonster: {fileID: 3598537380353828633, guid: 38e95bb7869e61d40a59a1d205430d7e, type: 3}
+  ObjectList1:
+  - {fileID: 3944490408184104557, guid: bdaec4f35c5718441b2228ae22868166, type: 3}
+  - {fileID: 7556275052419904985, guid: abed1e2a2b0a6c2409f40d2d1cf4ac46, type: 3}
+  - {fileID: 1674367646453798810, guid: 5c1df24be0057ae478b4c511dc6a784c, type: 3}
+  ObjectList2:
+  - {fileID: 459530013643875528, guid: d75e80f273ed8714f805ffc6d5b5955f, type: 3}
+  - {fileID: 1227796828698453082, guid: 42784e6019b9e4943b50aeb71c5fc9bc, type: 3}
+  - {fileID: 1160898794434979733, guid: 1386e28bbc132df4c9a8914cf71d8687, type: 3}
+  ObjectList3: []

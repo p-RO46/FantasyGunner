@@ -12,8 +12,8 @@ public class WeaponHandler : MonoBehaviour
     public int curBullet;
 
     public Camera cam;
-    public float MaxDistance; //RayÀÇ »ç°Å¸®
-    public GameObject fireParticle; // ÇÒ´çÇÒ ÆÄÆ¼Å¬ ÇÁ¸®ÆÕ
+    public float MaxDistance; //Rayï¿½ï¿½ ï¿½ï¿½Å¸ï¿½
+    public GameObject fireParticle; // ï¿½Ò´ï¿½ï¿½ï¿½ ï¿½ï¿½Æ¼Å¬ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
     void Start()
     {
@@ -34,23 +34,23 @@ public class WeaponHandler : MonoBehaviour
 
     void ShootRay()
     {
-        //1.È­¸éÀÇ Á¤Áß¾Ó ÁÂÇ¥ ¼³Á¤ (Screen Space)
-        //Screen.width / 2, Screen.height / 2°¡ È­¸éÀÇ Á¤Áß¾Ó
+        //1.È­ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß¾ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½ (Screen Space)
+        //Screen.width / 2, Screen.height / 2ï¿½ï¿½ È­ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß¾ï¿½
         Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
 
-        //2.È­¸é ÁÂÇ¥¸¦ Ray·Î º¯È¯
-        //Ä«¸Þ¶ó¿¡¼­ È­¸é Áß¾ÓÀ» Åë°úÇÏ´Â ¼±(Ray)¸¦ »ý¼º
+        //2.È­ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ Rayï¿½ï¿½ ï¿½ï¿½È¯
+        //Ä«ï¿½Þ¶ó¿¡¼ï¿½ È­ï¿½ï¿½ ï¿½ß¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½(Ray)ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         Ray ray = cam.ScreenPointToRay(screenCenter);
         RaycastHit hit;
 
-        //3.Ray ¹ß»ç (¹°¸® Ãæµ¹ Ã¼Å©)
+        //3.Ray ï¿½ß»ï¿½ (ï¿½ï¿½ï¿½ï¿½ ï¿½æµ¹ Ã¼Å©)
         if(Physics.Raycast(ray,out hit, MaxDistance))
         {
             GameObject hitObject = hit.collider.gameObject;
             GameObject effect = Instantiate(fireParticle, hit.point, Quaternion.LookRotation(hit.normal));
             
-            Debug.Log($"ÀûÁß ´ë»ó: {hitObject.name}");
-            Debug.Log($"ÀûÁß ÁöÁ¡ ÁÂÇ¥: {hit.point}");
+            //Debug.Log($"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½: {hitObject.name}");
+            //Debug.Log($"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥: {hit.point}");
 
             if (hitObject.CompareTag("Enemy"))
             {
@@ -59,7 +59,7 @@ public class WeaponHandler : MonoBehaviour
             Destroy(effect, 2.0f);
         }
 
-        //½Ã°¢ÀûÀ¸·Î È®ÀÎÇÏ±â À§ÇÑ µð¹ö±× ¼± (Scene ºä¿¡¼­¸¸ º¸ÀÓ)
+        //ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ (Scene ï¿½ä¿¡ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
         Debug.DrawRay(ray.origin, ray.direction * MaxDistance, Color.red, 1.0f);
     }
 }
