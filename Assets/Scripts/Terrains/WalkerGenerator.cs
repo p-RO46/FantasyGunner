@@ -28,6 +28,8 @@ public class WalkerGenerator : MonoBehaviour
     private float TileWidth = 20;
     private float TileHeight = 20;
 
+    public GameObject CS;
+
     void Start()
     {
         InitializeGrid();
@@ -268,9 +270,14 @@ public class WalkerGenerator : MonoBehaviour
         {
             for(int y = 0; y < gridHandler.GetLength(1); y++)
             {
-                Instantiate(Tiles[gridHandler[x, y].Type], 
+                GameObject tile = Instantiate(Tiles[gridHandler[x, y].Type], 
                 new Vector3(TileWidth * x - MapWidth * TileWidth / 2, 0 , TileHeight * y - MapHeight * TileHeight / 2), 
                 Quaternion.identity, transform);
+
+                if(gridHandler[x, y].Walkable && Random.Range(0, 30) == 0)
+                { 
+                    Instantiate(CS, tile.transform.position + CS.transform.position, Quaternion.identity);
+                }
             }
         }
     }

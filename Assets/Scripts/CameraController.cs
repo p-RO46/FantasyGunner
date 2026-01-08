@@ -3,11 +3,11 @@ using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
-    public Transform cameraContainer;
-    public float minXLook = -85f;    //ÃÖ¼Ò ½Ã¾ß°¢
-    public float maxXLook = 85f;    //ÃÖ´ë ½Ã¾ß°¢
-    private float camCurXRot = 0f;  //ÇöÀç XÃà È¸Àü °ª
-    public float lookSensitivity = 3f;  //¸¶¿ì½º °¨µµ
+    public Transform playerCam;
+    public float minXLook = -85f; //ìµœì†Œê°
+    public float maxXLook = 85f; //ìµœëŒ€ê°
+    private float camCurXRot = 0f;  
+    public float lookSensitivity = 3f;  
 
     private Vector2 mouseDelta;
 
@@ -36,8 +36,21 @@ public class CameraController : MonoBehaviour
 
         camCurXRot -= mouseY;
         camCurXRot = Mathf.Clamp(camCurXRot, minXLook, maxXLook);
-        cameraContainer.localEulerAngles = new Vector3(camCurXRot, 0, 0);
+        playerCam.localEulerAngles = new Vector3(camCurXRot, 0, 0); 
 
         transform.Rotate(Vector3.up * mouseX);
     }
+
+    public void CameraRecoil(float recoilXRot, float recoilYRot)
+    {
+        // ìˆ˜ì§ ë°˜ë™
+        camCurXRot -= recoilXRot;
+        camCurXRot = Mathf.Clamp(camCurXRot, minXLook, maxXLook);
+        playerCam.localEulerAngles = new Vector3(camCurXRot, 0, 0); 
+
+        // ìˆ˜í‰ ë°˜ë™
+        transform.Rotate(Vector3.up * recoilYRot);
+    }
+
+
 }

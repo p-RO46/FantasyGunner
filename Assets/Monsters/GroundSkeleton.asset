@@ -15,5 +15,5 @@ MonoBehaviour:
   characterName: GroundSkeleton
   charcaterType: Monster
   damage: 30
-  speed: 5
+  speed: 10
   maxHP: 100

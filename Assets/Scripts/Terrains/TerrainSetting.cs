@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class TerrainSetting : MonoBehaviour
 {
+    private Transform MonsterManager;
+    private Transform MapObjectParent; //맵에 배치되는 오브젝트들의 부모
     public TerrainData terrainData;
 
     private int ObjectSpawnChance;
@@ -9,6 +11,8 @@ public class TerrainSetting : MonoBehaviour
 
     void Start()
     {
+        MonsterManager = GameObject.FindWithTag("MonsterManager").transform;
+        MapObjectParent = GameObject.FindWithTag("MapObjectParent").transform;
         SetTerrainObejects();
         SpawnMonsters();
     }
@@ -28,7 +32,7 @@ public class TerrainSetting : MonoBehaviour
                     float y = 0;
 
                     float rotation = UnityEngine.Random.Range(0.0f, 180.0f);
-                    Instantiate(i, new Vector3(x, y, z) + transform.position, Quaternion.Euler(0, rotation, 0));
+                    Instantiate(i, new Vector3(x, y, z) + transform.position, Quaternion.Euler(0, rotation, 0), MapObjectParent);
                 }
             }
         }
@@ -44,7 +48,7 @@ public class TerrainSetting : MonoBehaviour
                 float y = 0;
 
                 float rotation = UnityEngine.Random.Range(0.0f, 180.0f);
-                GameObject tree = Instantiate(i, new Vector3(x, y, z) + transform.position, Quaternion.Euler(0, rotation, 0));
+                GameObject tree = Instantiate(i, new Vector3(x, y, z) + transform.position, Quaternion.Euler(0, rotation, 0), MapObjectParent);
                 
                 float scale = UnityEngine.Random.Range(0.5f, 1.5f);
                 tree.transform.localScale = new Vector3(scale, scale, scale);
@@ -64,7 +68,9 @@ public class TerrainSetting : MonoBehaviour
                 float y;
                 if (terrainData.Type.Equals("Lava")) { y = UnityEngine.Random.Range(15.0f, 20.0f); }
                 else { y = 0; }
-                Instantiate(terrainData.SpawnMonster, new Vector3(x, y, z) + transform.position, Quaternion.identity);
+
+                float rotation = UnityEngine.Random.Range(0.0f, 180.0f);
+                Instantiate(terrainData.SpawnMonster, new Vector3(x, y, z) + transform.position, Quaternion.Euler(0, rotation, 0), MonsterManager);
             }
         }
     }

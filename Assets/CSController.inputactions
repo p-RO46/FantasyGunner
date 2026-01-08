@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "name": "CSController",
+    "maps": [
+        {
+            "name": "CS_Acivate",
+            "id": "7841ddff-a2d7-474d-b5ff-f494fbe34b3d",
+            "actions": [
+                {
+                    "name": "Activate",
+                    "type": "Button",
+                    "id": "bb060ad9-871f-4536-98bc-1a82f1299521",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a2e1d4c0-d1b5-4247-a9f8-3936ebe20c60",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Activate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

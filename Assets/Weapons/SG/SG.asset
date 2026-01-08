@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c725a8085c03e74b9b2652ec615d557, type: 3}
+  m_Name: SG
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponData
+  gunName: Shotgun
+  damage: 100
+  equipTime: 1
+  canContinuousFire: 0
+  hasScope: 0
+  verticalForce: 100
+  horizontalForce: 100
+  accuracy: 98
+  fireRate: 0
+  maxAmmo: 10
+  loadAmmo: 2
+  reloadTime: 5
+  mesh: {fileID: 4300000, guid: 8c37ef1f6ca175a40bfb93fb8983a151, type: 2}
+  material: {fileID: 2100000, guid: a08712681d831f042a30b7c7be6c04f4, type: 2}

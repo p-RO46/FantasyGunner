@@ -37,7 +37,7 @@ public class MonsterMove : MonoBehaviour
         if(nextMove != 0)
         {
             float turnAngle = Random.Range(10.0f, 180.0f);
-            rigid.rotation = Quaternion.AngleAxis(turnAngle * nextMove, Vector3.up) * rigid.rotation; // �¿� ȸ��
+            rigid.rotation = Quaternion.AngleAxis(turnAngle * nextMove, Vector3.up) * rigid.rotation;
         }
         float nextThinkTime = Random.Range(2f, 5f);
         Invoke("Think", nextThinkTime);
