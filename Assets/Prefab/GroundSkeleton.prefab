@@ -1369,12 +1369,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4214267346043079776}
   - component: {fileID: 4214267346052440964}
-  - component: {fileID: -2194810652565879752}
   - component: {fileID: 9021156311060226944}
   - component: {fileID: 7346886817774865263}
   - component: {fileID: 3964754780479268137}
-  - component: {fileID: 4387881950167643183}
   - component: {fileID: 1856285009431823488}
+  - component: {fileID: 7942831035646002422}
   m_Layer: 0
   m_Name: GroundSkeleton
   m_TagString: Enemy
@@ -1423,22 +1422,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-2194810652565879752
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4214267346042916928}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d03700b172f8f254ba0f904a8c798cd0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharacterHandler
-  currentCharacterData: {fileID: 11400000, guid: 3b3387f299162cc4eaaa1ccf09e8c1a8, type: 2}
-  hpText: {fileID: 8533222720554801541}
-  curHP: 0
-  isAlive: 1
 --- !u!136 &9021156311060226944
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1504,20 +1487,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.01, y: 0.01, z: 0.007}
   m_Center: {x: 0, y: 0.16, z: -0.004}
---- !u!114 &4387881950167643183
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4214267346042916928}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9fe1d57ee02f9141b17491295c7cb8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MonsterMove
-  moveSpeed: 2
-  nextMove: 0
 --- !u!54 &1856285009431823488
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1545,6 +1514,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7942831035646002422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4214267346042916928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 478562d1f2939aa488e5a633a7cc3cae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Monster
+  hpText: {fileID: 8533222720554801541}
+  monsterData: {fileID: 11400000, guid: e42a87021d33181488fe77098500b0b8, type: 2}
 --- !u!1 &4214267346042916930
 GameObject:
   m_ObjectHideFlags: 0

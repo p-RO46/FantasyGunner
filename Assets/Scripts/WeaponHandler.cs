@@ -63,21 +63,27 @@ public class WeaponHandler : MonoBehaviour
 
         Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
 
-        Vector3 barrelRotation = cam.transform.forward + WeaponShake();
-        Ray ray = new Ray(cam.ScreenToWorldPoint(screenCenter), barrelRotation);
-        //Ray ray = cam.ScreenPointToRay(screenCenter);
+        //Vector3 barrelRotation = cam.transform.forward + WeaponShake();
+        //Ray ray = new Ray(cam.ScreenToWorldPoint(screenCenter), barrelRotation.normalized);
+        Ray ray = cam.ScreenPointToRay(screenCenter);
+        ray.direction += WeaponShake();
         RaycastHit hit;
 
         if(Physics.Raycast(ray, out hit, MaxDistance))
         {
             GameObject hitObject = hit.collider.gameObject;
-            GameObject effect = Instantiate(fireParticle, hit.point, Quaternion.LookRotation(hit.normal));
-
-            if (hitObject.CompareTag("Enemy"))
+            if (!hitObject.CompareTag("Player"))
             {
-                hitObject.GetComponent<CharacterHandler>().attacked(currentWeaponData.damage);
+                GameObject effect = Instantiate(fireParticle, hit.point, Quaternion.LookRotation(hit.normal));
+
+                if (hitObject.CompareTag("Enemy"))
+                {
+                    hitObject.GetComponent<Monster>().Attacked(
+                        currentWeaponData.damage, currentWeaponData.hasStun, currentWeaponData.stunTime);
+                }
+
+                Destroy(effect, 2.0f);
             }
-            Destroy(effect, 2.0f);
         }
 
         currentWeapon.loadedBullet = currentWeapon.loadedBullet - 1;

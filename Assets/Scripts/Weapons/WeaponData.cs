@@ -9,7 +9,7 @@ public class WeaponData : ScriptableObject
     /// </summary>
     [Header("Basic Stats")]
     public string gunName;
-    public float damage;
+    public int damage;
     public float equipTime;
 
     [Header("Shooting Stats")]
@@ -19,6 +19,8 @@ public class WeaponData : ScriptableObject
     public float horizontalForce;
     public float accuracy;
     public float fireRate;
+    public bool hasStun;
+    public float stunTime;
 
     [Header("Ammo Settings")]
     public int maxAmmo;

@@ -1007,6 +1007,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1483458401}
+  - component: {fileID: 1483458402}
   m_Layer: 0
   m_Name: MonsterManager
   m_TagString: MonsterManager
@@ -1029,6 +1030,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1483458402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1483458400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fdd192946504f84f9cbd3b62539b4ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MonsterManager
+  monsters: []
 --- !u!1 &1730654822
 GameObject:
   m_ObjectHideFlags: 0
@@ -1450,8 +1464,6 @@ MonoBehaviour:
   - {fileID: 2124741444108904875, guid: 6ff007aa421463b46b117f84ccd6e7bc, type: 3}
   - {fileID: 2124741444108904875, guid: ca55bf8c7e263b64e9692046312b6402, type: 3}
   Terrains:
-  - {fileID: 11400000, guid: 68d7df8886f42604e87e73b1dda7d0a9, type: 2}
-  - {fileID: 11400000, guid: 760fe65ad93dfdc4fac7b9c0eba216db, type: 2}
   - {fileID: 11400000, guid: 0a52690181ea64546aeacaaf5f77ce41, type: 2}
 --- !u!114 &2136508558
 MonoBehaviour:

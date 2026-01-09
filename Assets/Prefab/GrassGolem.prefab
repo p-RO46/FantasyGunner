@@ -491,10 +491,7 @@ PrefabInstance:
       addedObject: {fileID: 7044970819649785740}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cfbfb95b5f2b90949be0b5faab2775fb, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6276626882046051326}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cfbfb95b5f2b90949be0b5faab2775fb, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3142338327573177695}
+      addedObject: {fileID: 832774430248831224}
   m_SourcePrefab: {fileID: 100100000, guid: cfbfb95b5f2b90949be0b5faab2775fb, type: 3}
 --- !u!1 &3598537380353828633 stripped
 GameObject:
@@ -572,7 +569,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 0
---- !u!114 &6276626882046051326
+--- !u!114 &832774430248831224
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -581,27 +578,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3598537380353828633}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d03700b172f8f254ba0f904a8c798cd0, type: 3}
+  m_Script: {fileID: 11500000, guid: 478562d1f2939aa488e5a633a7cc3cae, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharacterHandler
-  currentCharacterData: {fileID: 11400000, guid: 132d10571d8216c46928d2adce438e72, type: 2}
+  m_EditorClassIdentifier: Assembly-CSharp::Monster
   hpText: {fileID: 3452588729757246691}
-  curHP: 0
-  isAlive: 1
---- !u!114 &3142338327573177695
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3598537380353828633}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9fe1d57ee02f9141b17491295c7cb8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MonsterMove
-  moveSpeed: 2
-  nextMove: 0
+  monsterData: {fileID: 11400000, guid: 957a85b61d41c674abe02e4671e1a4a5, type: 2}
 --- !u!4 &4232048854964649379 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: cfbfb95b5f2b90949be0b5faab2775fb, type: 3}

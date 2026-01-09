@@ -521,10 +521,7 @@ PrefabInstance:
       addedObject: {fileID: -2843832724552163436}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: fa9778b774bc61c4788903d3a868d6cb, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -976374189551636413}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: fa9778b774bc61c4788903d3a868d6cb, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 9205947536390992850}
+      addedObject: {fileID: 6595593420411613878}
   m_SourcePrefab: {fileID: 100100000, guid: fa9778b774bc61c4788903d3a868d6cb, type: 3}
 --- !u!4 &72094522228362207 stripped
 Transform:
@@ -606,7 +603,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-976374189551636413
+--- !u!114 &6595593420411613878
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -615,24 +612,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 741951797611729253}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d03700b172f8f254ba0f904a8c798cd0, type: 3}
+  m_Script: {fileID: 11500000, guid: 478562d1f2939aa488e5a633a7cc3cae, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharacterHandler
-  currentCharacterData: {fileID: 11400000, guid: b7e7f911172dc374bbaaad9f137e0401, type: 2}
+  m_EditorClassIdentifier: Assembly-CSharp::Monster
   hpText: {fileID: 7893285195055339701}
-  curHP: 0
-  isAlive: 1
---- !u!114 &9205947536390992850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 741951797611729253}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9fe1d57ee02f9141b17491295c7cb8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MonsterMove
-  moveSpeed: 2
-  nextMove: 0
+  monsterData: {fileID: 11400000, guid: 276e7b5bc74f8a549afd1cfbb64d6fc1, type: 2}
