@@ -14,13 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   CharacterName: Skeleton
   CharacterType: Monster
-  Speed: 10
+  Speed: 10.5
+  RotationSpeed: 3
   Damage: 10
   MaxHP: 100
-  DeadTime: 1
+  DeadTime: 2
   AttackObject: {fileID: 3684564457815700155, guid: 4307b680b2288474e90ddcb71f2857f9, type: 3}
   AttackPower: 10
-  AttackTime: 1
+  AttackTime: 2
   HasStun: 1
   StunTime: 1
-  AttackRange: 5
+  AttackRange: 20

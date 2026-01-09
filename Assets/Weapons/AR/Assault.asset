@@ -19,10 +19,12 @@ MonoBehaviour:
   hasScope: 1
   verticalForce: 80
   horizontalForce: 80
-  accuracy: 98.6
-  fireRate: 0.1
-  maxAmmo: 90
-  loadAmmo: 30
-  reloadTime: 5
+  accuracy: 98.99
+  fireRate: 0.05
+  hasStun: 1
+  stunTime: 0.5
+  maxAmmo: 1000
+  loadAmmo: 100
+  reloadTime: 2
   mesh: {fileID: 4300000, guid: 70055eb82002f844bb5b57a3ef47fcfa, type: 2}
   material: {fileID: 2100000, guid: 465f56e0b8d4b8c4a9bcb9ef2bdbd5dc, type: 2}

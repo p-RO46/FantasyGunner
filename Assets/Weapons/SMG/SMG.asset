@@ -17,10 +17,12 @@ MonoBehaviour:
   equipTime: 1
   canContinuousFire: 1
   hasScope: 0
-  verticalForce: 50
-  horizontalForce: 50
-  accuracy: 98.2
+  verticalForce: 90
+  horizontalForce: 90
+  accuracy: 98.5
   fireRate: 0.05
+  hasStun: 1
+  stunTime: 0.5
   maxAmmo: 10000
   loadAmmo: 1000
   reloadTime: 1

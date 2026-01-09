@@ -21,6 +21,8 @@ MonoBehaviour:
   horizontalForce: 50
   accuracy: 98.99
   fireRate: 0
+  hasStun: 1
+  stunTime: 0.5
   maxAmmo: 20
   loadAmmo: 1
   reloadTime: 5

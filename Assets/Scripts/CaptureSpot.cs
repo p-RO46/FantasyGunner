@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class CaptureSpot : MonoBehaviour
 {
+    public MonsterManager monsterManager;
     private GameObject Player;
     private Transform _Player;
     public float range = 10f;
@@ -12,6 +13,9 @@ public class CaptureSpot : MonoBehaviour
     void Start()
     {
         Player = GameObject.FindWithTag("Player");
+
+        GameObject managerObject = GameObject.FindWithTag("MonsterManager");
+        monsterManager = managerObject.GetComponent<MonsterManager>();
     }
 
     void Update()
@@ -42,6 +46,8 @@ public class CaptureSpot : MonoBehaviour
             GetComponentInParent<Animator>().SetBool("Activate", true);
             activated = true;
             canInteract = false; 
+            
+            monsterManager.AddActivation();
             // 활성화되는 코드
             // 지도 해금
             // 포인트 지급

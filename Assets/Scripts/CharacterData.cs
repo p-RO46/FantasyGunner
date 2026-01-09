@@ -7,6 +7,7 @@ public class CharacterData : ScriptableObject
     public string CharacterName;
     public string CharacterType;
     public float Speed;
+    public float RotationSpeed;
     public int Damage;
     public int MaxHP;
     public float DeadTime = 1f;
