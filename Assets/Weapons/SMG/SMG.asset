@@ -18,8 +18,8 @@ MonoBehaviour:
   canContinuousFire: 1
   hasScope: 0
   verticalForce: 90
-  horizontalForce: 90
-  accuracy: 98.5
+  horizontalForce: 100
+  accuracy: 98
   fireRate: 0.05
   hasStun: 1
   stunTime: 0.5

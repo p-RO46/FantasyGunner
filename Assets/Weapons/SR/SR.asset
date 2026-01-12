@@ -19,7 +19,7 @@ MonoBehaviour:
   hasScope: 1
   verticalForce: 200
   horizontalForce: 50
-  accuracy: 98.99
+  accuracy: 98
   fireRate: 0
   hasStun: 1
   stunTime: 0.5

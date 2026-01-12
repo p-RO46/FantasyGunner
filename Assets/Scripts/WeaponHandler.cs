@@ -5,6 +5,10 @@ using System.Collections;
 
 public class WeaponHandler : MonoBehaviour
 {
+    //====지금까지 쏜 총알 수====//
+    private int Shooted = 0;
+    //=========================//
+
     public GameObject weapon;
     public Weapon currentWeapon;
     private WeaponData currentWeaponData;
@@ -44,6 +48,7 @@ public class WeaponHandler : MonoBehaviour
             if (!currentWeaponData.canContinuousFire) //단발
             {
                 ShootRay();
+                Shooted = 0;
             }
             else //연사
             {
@@ -55,6 +60,7 @@ public class WeaponHandler : MonoBehaviour
     private void StopFiring(InputAction.CallbackContext context)
     {
         isShooting = false;
+        Shooted = 0;
     }
 
     private void ShootRay()
@@ -98,6 +104,7 @@ public class WeaponHandler : MonoBehaviour
         curAmmo.text = currentWeapon.loadedBullet.ToString();
 
         GunRecoil();
+        Shooted ++;
         Debug.DrawRay(ray.origin, ray.direction * MaxDistance, Color.red, 1.0f);
     }
 
@@ -242,10 +249,25 @@ public class WeaponHandler : MonoBehaviour
     // 자연스럽게 움직이려면??
     public void GunRecoil()
     {
-        float recoilYRot = (Mathf.PerlinNoise(Time.time, 0f) - 0.5f) 
-            * currentWeaponData.horizontalForce * 0.01f; // 수평 반동
+        float recoilXRot, recoilYRot;
+        //Debug.Log("Shooted : " + Shooted.ToString());
+        if(Shooted < 20) //WeaponData에 범위 추가하기
+        {
+            recoilXRot = currentWeaponData.verticalForce * 0.01f; // 수직 반동
+            recoilYRot = 0;
+        }
+        else
+        {
+            recoilXRot = 0;
 
-        float recoilXRot = currentWeaponData.verticalForce * 0.01f; // 수직 반동
+            float rotX = Mathf.PerlinNoise(Time.time, 0f) - 0.5f;
+            float rotY = (Mathf.PerlinNoise(0f, Time.time) - 0.5f) * currentWeaponData.horizontalForce * 3f;
+            float rotZ = Mathf.PerlinNoise(Time.time, Time.time - 0.5f);
+
+            //recoilYRot = new Vector3(rotX, rotY, rotZ);
+            recoilYRot = currentWeaponData.horizontalForce * 0.01f; // 수평 반동
+        }
+
         GetComponent<CameraController>().CameraRecoil(recoilXRot, recoilYRot);
     }
     #endregion
