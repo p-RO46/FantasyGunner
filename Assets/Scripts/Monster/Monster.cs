@@ -32,6 +32,7 @@ public class Monster : MonoBehaviour, ManagedMonster
 
     public bool isAttacking { get; set; } = false;
     public bool isStunned { get; set; } = false;
+    public bool isFollowing = false;
 
     void Start()
     {
@@ -57,9 +58,11 @@ public class Monster : MonoBehaviour, ManagedMonster
         if(destroy) return;
 
         attackDirection = playerTransform.position - transform.position;
+        float viewAngle = 90f; //예비용
+        float angleCos = Mathf.Cos(viewAngle * 0.5f * Mathf.Deg2Rad);
         //플레이어 감지 시 Attack 시도
-        if(attackDirection.sqrMagnitude < 100 || 
-            (Vector3.Dot(transform.forward, playerTransform.position) < 0 && attackDirection.sqrMagnitude < monsterData.AttackRange * monsterData.AttackRange))
+        if (attackDirection.sqrMagnitude < 100 || 
+            (Vector3.Dot(transform.forward, attackDirection.normalized) >= angleCos && attackDirection.sqrMagnitude < monsterData.AttackRange * monsterData.AttackRange))
         {
             Attack(attackDirection.normalized);
         }
@@ -108,20 +111,23 @@ public class Monster : MonoBehaviour, ManagedMonster
             return;
         }
 
-        StopAllCoroutines();
-        if(attackCoroutine != null) moveCoroutine = null;
+        //StopAllCoroutines();
+        if (moveCoroutine != null)
+        {
+            StopCoroutine(moveCoroutine);
+            moveCoroutine = null;
+        }
+
+        //if(attackCoroutine != null) moveCoroutine = null;
 
         lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
         lookRotation *= Quaternion.Euler(new Vector3(0, -40, 0));
         isRotating = true;
-        //isMoving = false;
 
-        GameObject attack = Instantiate(monsterData.AttackObject, transform.position + new Vector3(0,10,0), Quaternion.identity, transform);
-        Rigidbody attackRig = attack.GetComponent<Rigidbody>();
-        attackRig.AddForce(direction * monsterData.AttackPower, ForceMode.Force);
-
-        if(attackCoroutine != null) attackCoroutine = null;
+        //if(attackCoroutine != null) attackCoroutine = null;
         attackCoroutine = StartCoroutine(AttackAnimation());
+
+        FollowPlayer();
     }
     
     IEnumerator AttackAnimation()
@@ -129,11 +135,15 @@ public class Monster : MonoBehaviour, ManagedMonster
         isAttacking = true;
         animator.SetTrigger("Attack");
         // 공격 모션
-        yield return Util.WaitForSecond(monsterData.AttackTime);
+        yield return Util.WaitForSecond(monsterData.AttackTime / 2);
+        GetComponentInChildren<AttackSpawner>().SpawnAttack(player.transform.position);
+        yield return Util.WaitForSecond(monsterData.AttackTime / 2);
+
         lookRotation *= Quaternion.Euler(new Vector3(0, 40, 0));
         isAttacking = false;
 
         moveCoroutine = StartCoroutine(MoveCoroutine());
+        attackCoroutine = null;
     }
 
     public void Attacked(int damage, bool hasStun, float stunTime)
@@ -152,13 +162,24 @@ public class Monster : MonoBehaviour, ManagedMonster
         }
         else if (hasStun)
         {
-            StopAllCoroutines();
+            if (moveCoroutine != null)
+            {
+                StopCoroutine(moveCoroutine);
+                moveCoroutine = null;
+            }
+            if (attackCoroutine != null)
+            {
+                StopCoroutine(attackCoroutine);
+                attackCoroutine = null;
+            }
             isAttacking = false;
             //isMoving = false;
             isRotating = false;
 
             stunCoroutine = StartCoroutine(StunAnimation(stunTime));
         }
+
+        FollowPlayer();
     }
 
     private void UpdateHP()
@@ -181,9 +202,8 @@ public class Monster : MonoBehaviour, ManagedMonster
         yield return Util.WaitForSecond(stunTime);
         isStunned = false;
 
-        stunCoroutine = null;
-
         moveCoroutine = StartCoroutine(MoveCoroutine());
+        stunCoroutine = null;
     }
     
     IEnumerator DeadAnimation()
@@ -198,11 +218,19 @@ public class Monster : MonoBehaviour, ManagedMonster
     }
 
     IEnumerator MoveCoroutine()
-    {  
+    {
+        if (isFollowing)
+        {
+            moveCoroutine = null;
+            yield break;
+        }
+
         nextThinkTime = Random.Range(2f, 5f);
         animator.SetInteger("Walk", nextMove);
         yield return Util.WaitForSecond(nextThinkTime);
+
         Think();
+        moveCoroutine = null;
     }
 
     void Think()
@@ -210,7 +238,7 @@ public class Monster : MonoBehaviour, ManagedMonster
         isMoving = false;
         isRotating = false;
 
-        if(!isAlive || isAttacking || isStunned)
+        if(!isAlive || isAttacking || isStunned || isFollowing)
         {
             return;
         }
@@ -230,9 +258,62 @@ public class Monster : MonoBehaviour, ManagedMonster
         moveCoroutine = StartCoroutine(MoveCoroutine());
     }
 
+    // 공격을 하거나 공격당하는 경우, 플레이어를 쫓아간다
+    // 공격 범위 내면 공격하고, 멀어지면 쫓아감
+    void FollowPlayer()
+    {
+        isFollowing = true;
+        /*
+        Vector3 direction = transform.position - player.transform.position;
+        float distance = direction.sqrMagnitude;
+
+        isMoving = true;
+        isRotating = true;
+        if (distance > monsterData.AttackRange)
+        {
+            lookRotation = Quaternion.Euler(direction.x, 0, direction.z);
+            isMoving = true;
+            isRotating = true;
+        }*/
+        if (moveCoroutine != null)
+        {
+            StopCoroutine(moveCoroutine);
+            moveCoroutine = null;
+        }
+        StartCoroutine(Following());
+    }
+
+    IEnumerator Following()
+    {
+        while (true)
+        {
+            Vector3 direction = player.transform.position - transform.position; // why not updated...
+            float distance = direction.sqrMagnitude;
+            if ((distance > monsterData.AttackRange * monsterData.AttackRange) && !isAttacking && !isStunned)
+            {
+                direction = direction.normalized;
+                direction.y = 0;
+                lookRotation = Quaternion.LookRotation(direction); 
+
+                nextMove = 1;
+                animator.SetInteger("Walk", nextMove);
+                isMoving = true;
+                isRotating = true;
+            }
+            yield return Util.WaitForSecond(0.01f);
+        }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            Think();
+        }
+    }
+
     public void notify()
     {
-        //Manager에게 저 죽었어요 라고 알려주기
-        //Update 때마다 Manager가 일일이 알아보는건 좀 그렇지않나?
+        // 애매하다
     }
 }

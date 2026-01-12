@@ -21,7 +21,7 @@ MonoBehaviour:
   DeadTime: 2
   AttackObject: {fileID: 3684564457815700155, guid: 4307b680b2288474e90ddcb71f2857f9, type: 3}
   AttackPower: 10
-  AttackTime: 2
+  AttackTime: 1.5
   HasStun: 1
   StunTime: 1
   AttackRange: 20

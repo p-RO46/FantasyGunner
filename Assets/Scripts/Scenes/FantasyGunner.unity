@@ -1237,7 +1237,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &718746878
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3220,13 +3220,17 @@ PrefabInstance:
       propertyPath: remainAmmo
       value: 
       objectReference: {fileID: 391856201}
+    - target: {fileID: 3825990513149817916, guid: 849ee737a0dfa524ab397d02fa80320f, type: 3}
+      propertyPath: hpSlider
+      value: 
+      objectReference: {fileID: 1972241185}
     - target: {fileID: 5162693809724173816, guid: 849ee737a0dfa524ab397d02fa80320f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5162693809724173816, guid: 849ee737a0dfa524ab397d02fa80320f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 20
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 5162693809724173816, guid: 849ee737a0dfa524ab397d02fa80320f, type: 3}
       propertyPath: m_LocalPosition.z

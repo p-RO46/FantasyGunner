@@ -8,6 +8,7 @@ TagManager:
   - MapObjectParent
   - MonsterManager
   - Tile
+  - Obstacle
   layers:
   - Default
   - TransparentFX
