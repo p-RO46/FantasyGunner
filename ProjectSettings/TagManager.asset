@@ -9,6 +9,7 @@ TagManager:
   - MonsterManager
   - Tile
   - Obstacle
+  - Water
   layers:
   - Default
   - TransparentFX

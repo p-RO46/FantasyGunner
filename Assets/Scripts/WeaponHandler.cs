@@ -28,11 +28,18 @@ public class WeaponHandler : MonoBehaviour
     private InputAction shootAction;
     public bool isShooting = false;
 
+    public AudioClip shootSound; //임시, GunData에서 가져오는걸로 바꾸기
+    public AudioClip reloadSound;
+    public AudioClip equipSound;
+
+    private AudioSource audioSource;
+
     void Awake()
     {
         shootAction = ipa.FindActionMap("GamePlay").FindAction("Shoot");
         shootAction.started += StartFiring;
         shootAction.canceled += StopFiring;
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void StartFiring(InputAction.CallbackContext context)
@@ -66,6 +73,7 @@ public class WeaponHandler : MonoBehaviour
     private void ShootRay()
     {
         weapon.GetComponent<Animator>().SetTrigger("Fire");
+        audioSource.PlayOneShot(shootSound);
 
         Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
 
@@ -75,7 +83,9 @@ public class WeaponHandler : MonoBehaviour
         ray.direction += WeaponShake();
         RaycastHit hit;
 
-        if(Physics.Raycast(ray, out hit, MaxDistance))
+        int layerMask = ~(1 << LayerMask.NameToLayer("Water"));
+        
+        if (Physics.Raycast(ray, out hit, MaxDistance, layerMask))
         {
             GameObject hitObject = hit.collider.gameObject;
             if (!hitObject.CompareTag("Player"))
@@ -141,7 +151,8 @@ public class WeaponHandler : MonoBehaviour
             Debug.Log("이미 탄환이 가득찬 상태입니다.");
             return;
         }
-        if(currentWeapon.remainBullet < toLoad )
+
+        if (currentWeapon.remainBullet < toLoad )
         {
             currentWeapon.loadedBullet += currentWeapon.remainBullet;
             currentWeapon.remainBullet = 0;
@@ -185,6 +196,7 @@ public class WeaponHandler : MonoBehaviour
             if(!isReloading || isReloadingbySwaping)
             {
                 Debug.Log("장전 시작합니다..");
+                audioSource.PlayOneShot(reloadSound);
                 isReloading = true;
                 weapon.GetComponent<Animator>().SetTrigger("Reload");
                 yield return Util.WaitForSecond(currentWeaponData.reloadTime);
@@ -214,6 +226,19 @@ public class WeaponHandler : MonoBehaviour
 
     public void EquipGun(Weapon w)
     {
+        if (w == null)
+        {
+            Debug.LogError("전달된 무기(w)가 null입니다!");
+            return;
+        }
+        if (audioSource == null)
+        {
+            Debug.LogError("audioSource가 할당되지 않았습니다!");
+            return;
+        }
+
+        audioSource.PlayOneShot(equipSound);
+
         currentWeapon = w;
         currentWeaponData = currentWeapon.weaponData;
         gunName.text = currentWeaponData.gunName;

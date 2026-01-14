@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,13 +9,17 @@ public class CameraController : MonoBehaviour
     public float maxXLook = 85f; //최대각
     private float camCurXRot = 0f;
     private float playerCurYRot = 0f; 
-    public float lookSensitivity = 3f;  
+    public float lookSensitivity = 3f;
+
+    private Vector3 camOrigin;
 
     private Vector2 mouseDelta;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        camOrigin = playerCam.localPosition;
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -56,5 +61,17 @@ public class CameraController : MonoBehaviour
         //playerCurYRot = Mathf.Clamp(playerCurYRot);
         // 수평 반동
         //transform.Rotate(Vector3.up * recoilYRot);
+    }
+
+    public void CameraDown(bool crouch)
+    {
+        if (crouch)
+        {
+            playerCam.localPosition += new Vector3(0, 1, 0);
+        }
+        else
+        {
+            playerCam.localPosition += new Vector3(0, -1, 0);
+        }
     }
 }

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1008535039992391284}
   - component: {fileID: 8902045277152780776}
   - component: {fileID: 4819479918480658717}
-  - component: {fileID: 6292020747227261291}
   - component: {fileID: 2753103450847884066}
   m_Layer: 0
   m_Name: WaterTile
@@ -69,7 +68,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 965b7c5c9e10a924ba4182a967639902, type: 2}
+  - {fileID: 2100000, guid: 3917d4e9dc804c74e8cf04a4283a7c23, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -93,28 +92,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6292020747227261291
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2124741444108904875}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!114 &2753103450847884066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,9 +115,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7711350037264397301}
   - component: {fileID: 8713017634450085514}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: Collider
-  m_TagString: Obstacle
+  m_TagString: Water
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -173,7 +150,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0

@@ -11,8 +11,8 @@ public class InventoryManager : MonoBehaviour
     public List<Weapon> weaponInventory;
     public bool isSwapping = false;
     public Coroutine swapCoroutine;
-    private WeaponHandler handler;
 
+    private WeaponHandler handler;
     private bool initializer = true; //최초 초기화용 인자. 초기화 완료 후엔 false
 
     void Start()

@@ -18,4 +18,10 @@ public class TerrainData : ScriptableObject
     public List<GameObject> ObjectList1;
     public List<GameObject> ObjectList2;
     public List<GameObject> ObjectList3;
+
+    [Header("FootSteps")]
+    public List<AudioClip> Walk;
+    public List<AudioClip> Run;
+    public List<AudioClip> JumpStart;
+    public List<AudioClip> JumpLand;
 }

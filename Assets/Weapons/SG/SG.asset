@@ -25,6 +25,6 @@ MonoBehaviour:
   stunTime: 0.5
   maxAmmo: 10
   loadAmmo: 2
-  reloadTime: 5
+  reloadTime: 2
   mesh: {fileID: 4300000, guid: 8c37ef1f6ca175a40bfb93fb8983a151, type: 2}
   material: {fileID: 2100000, guid: a08712681d831f042a30b7c7be6c04f4, type: 2}
