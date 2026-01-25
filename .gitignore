@@ -64,6 +64,16 @@ sysinfo.txt
 *.unitypackage
 *.app
 
+# LLM 관련 대용량 파일 제외
+**/StreamingAssets/Llamalib/
+**/LLMUnity/
+*.gguf
+*.bin
+Assets/LLMUnity.meta
+Assets/StreamingAssets.meta
+Assets/StreamingAssets/LlamaLib-v2.0.0.meta
+Assets/StreamingAssets/LlamaLib-v2.0.0/setup.meta
+
 # Crashlytics generated file
 crashlytics-build.properties
 
