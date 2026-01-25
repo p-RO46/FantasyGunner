@@ -1,14 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public class WalkerGenerator : MonoBehaviour
 {
+    private TerrainManager manager;
+
+    public GameObject minimapFog;
+
     //Variables
     public Dictionary<string, GameObject> Tiles;
     public Dictionary<string, TerrainData> FloorDatas;
     public TerrainData Water; //wall
     public TerrainData Empty; //empty
+
+    public MonsterManager monsterManager;
 
     public TerrainData[,] gridHandler; //x,y `positions
     public List<WalkerObject> Walkers; //List of custom walker class
@@ -30,12 +37,13 @@ public class WalkerGenerator : MonoBehaviour
 
     public GameObject CS;
 
-    void Start()
+    private void Start()
     {
+        manager = GetComponent<TerrainManager>();
         InitializeGrid();
     }
 
-    void InitializeGrid()
+    public void InitializeGrid()
     {
         Tiles = new Dictionary<string, GameObject>();
         FloorDatas = new Dictionary<string, TerrainData>();
@@ -82,6 +90,7 @@ public class WalkerGenerator : MonoBehaviour
         TileCount++;
 
         StartCoroutine(CreateFloors());
+        //CreateFloors();
     }
 
     Vector2 GetDirection()
@@ -105,7 +114,7 @@ public class WalkerGenerator : MonoBehaviour
 
     TerrainData GetTerrainType()
     {
-        int choice = UnityEngine.Random.Range(0, floorNumber);
+        int choice = Random.Range(0, floorNumber);
 
         int iteration = 0;
         foreach(TerrainData T in FloorDatas.Values)
@@ -140,7 +149,7 @@ public class WalkerGenerator : MonoBehaviour
 
     IEnumerator CreateFloors()
     {
-        while((float)TileCount / (float)gridHandler.Length < FillPercentage)
+        while ((float)TileCount / (float)gridHandler.Length < FillPercentage)
         {
             bool hasCreatedFloor = false;
             foreach(WalkerObject curWalker in Walkers)
@@ -162,11 +171,12 @@ public class WalkerGenerator : MonoBehaviour
 
             if (hasCreatedFloor)
             {
-                yield return new WaitForSeconds(WaitTime);
+                yield return Util.WaitForSecond(WaitTime);
             }
         }
 
         StartCoroutine(CreateWalls());
+        //CreateWalls();
     }
 
     void ChanceToRemove()
@@ -186,7 +196,7 @@ public class WalkerGenerator : MonoBehaviour
     {
         for(int i = 0; i<Walkers.Count; i++)
         {
-            if (UnityEngine.Random.value < Walkers[i].ChanceToChange)
+            if (Random.value < Walkers[i].ChanceToChange)
             {
                 WalkerObject curWalker = Walkers[i];
                 curWalker.Direction = GetDirection();
@@ -200,7 +210,7 @@ public class WalkerGenerator : MonoBehaviour
         int updatedCount = Walkers.Count;
         for(int i= 0; i<updatedCount; i++)
         {
-            if(UnityEngine.Random.value < Walkers[i].ChanceToChange && Walkers.Count < MaximumWalkers)
+            if(Random.value < Walkers[i].ChanceToChange && Walkers.Count < MaximumWalkers)
             {
                 Vector2 newDirection = GetDirection();
                 Vector2 newPosition = Walkers[i].Position;
@@ -231,54 +241,61 @@ public class WalkerGenerator : MonoBehaviour
             {
                 if(gridHandler[x,y].Walkable)
                 {
-                    bool hasCreatedWall = false;
+                    bool hasCreatedWalls = false;
 
-                    if(gridHandler[x+1, y].isEmpty)
+                    if (gridHandler[x+1, y].isEmpty)
                     {
                         gridHandler[x+1, y] = Water;
-                        hasCreatedWall = true;
+                        hasCreatedWalls = true;
                     }
                     if(gridHandler[x-1, y].isEmpty)
                     {
                         gridHandler[x-1, y] = Water;
-                        hasCreatedWall = true;
+                        hasCreatedWalls = true;
                     }
                     if(gridHandler[x,y+1].isEmpty)
                     {
                         gridHandler[x, y+1] = Water;
-                        hasCreatedWall = true;
+                        hasCreatedWalls = true;
                     }
                     if(gridHandler[x,y-1].isEmpty)
                     {
                         gridHandler[x, y-1] = Water;
-                        hasCreatedWall = true;
+                        hasCreatedWalls = true;
                     }
 
-                    if (hasCreatedWall)
+                    if (hasCreatedWalls)
                     {
-                        yield return new WaitForSeconds(WaitTime);
+                        yield return Util.WaitForSecond(WaitTime);
                     }
                 }
             }
         }
+
         SetTiles();
     }
 
     void SetTiles()
     {
-        for(int x = 0; x < gridHandler.GetLength(0); x++)
+        for (int x = 0; x < gridHandler.GetLength(0); x++)
         {
-            for(int y = 0; y < gridHandler.GetLength(1); y++)
+            for (int y = 0; y < gridHandler.GetLength(1); y++)
             {
-                GameObject tile = Instantiate(Tiles[gridHandler[x, y].Type], 
-                new Vector3(TileWidth * x - MapWidth * TileWidth / 2, 0 , TileHeight * y - MapHeight * TileHeight / 2), 
+                GameObject tile = Instantiate(Tiles[gridHandler[x, y].Type],
+                new Vector3(TileWidth * x - MapWidth * TileWidth / 2, 0, TileHeight * y - MapHeight * TileHeight / 2),
                 Quaternion.identity, transform);
 
-                if(gridHandler[x, y].Walkable && Random.Range(0, 30) == 0)
-                { 
+                manager.addTile(tile, x, y);
+
+                if (gridHandler[x, y].Walkable && Random.Range(0, 30) == 0)
+                {
                     Instantiate(CS, tile.transform.position + CS.transform.position, Quaternion.identity);
+                    monsterManager.SpawnCS();
                 }
             }
         }
+        minimapFog.transform.localScale = new Vector3(TileWidth * MapWidth, 1, TileHeight * MapHeight);
+
+        manager.SettingCompleted();
     }
 }

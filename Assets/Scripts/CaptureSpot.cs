@@ -1,35 +1,54 @@
 using UnityEngine.InputSystem;
 using UnityEngine;
+using System.Collections;
 
 public class CaptureSpot : MonoBehaviour
 {
-    public MonsterManager monsterManager;
+    private MonsterManager monsterManager;
     private GameObject Player;
+    private GameObject GameUI;
+    private GameObject ActivateUI;
+
+    private AudioSource audioSource;
+    public AudioClip loop;
+    public AudioClip clip;
+
     private Transform _Player;
     public float range = 10f;
 
-    private bool canInteract = false;
+    public bool canInteract = false;
     public bool activated = false;
+
+    private bool alreadyDetected = false;
+
     void Start()
     {
         Player = GameObject.FindWithTag("Player");
+        _Player = Player.transform;
+
+        GameUI = GameObject.Find("GameUIParent").transform.GetChild(0).gameObject;
+        Transform _ActivateUI = GameUI.transform.Find("Activate UI");
+        ActivateUI = _ActivateUI.gameObject;
+
+        //ActivateUI.SetActive(false);
 
         GameObject managerObject = GameObject.FindWithTag("MonsterManager");
         monsterManager = managerObject.GetComponent<MonsterManager>();
+
+        audioSource = GetComponent<AudioSource>();
     }
 
-    void Update()
+    public void Interactable(bool active)
     {
-        _Player= Player.GetComponent<Transform>();
-        if (!activated)
-        {
-            //조건 : 카메라에 잡혔을 때 추가
-            if((_Player.position - transform.position).sqrMagnitude < range * range)
-            {
-                canInteract = true;
-            }
-            else { canInteract = false; }
-        }
+        if (alreadyDetected == active) { return; }
+        if (activated) { return; }
+
+        ActivateUI.SetActive(active);
+        canInteract = active;
+        alreadyDetected = active;
+
+        //audioSource.PlayOneShot(loop);
+        //Debug.Log(gameObject.name + " UI 상태: " + active);
     }
 
     public void ActivateSpot(InputAction.CallbackContext context)
@@ -45,12 +64,32 @@ public class CaptureSpot : MonoBehaviour
             Debug.Log("상호작용 완료!");
             GetComponentInParent<Animator>().SetBool("Activate", true);
             activated = true;
-            canInteract = false; 
-            
+            canInteract = false;
+            ActivateUI.SetActive(false);
+
+            audioSource.Stop();
+            audioSource.spatialBlend = 0f;
+            audioSource.PlayOneShot(clip);
+
+            StartCoroutine(StopSound());
+
             monsterManager.AddActivation();
+
             // 활성화되는 코드
             // 지도 해금
             // 포인트 지급
         }
+    }
+
+    public void PlaySound()
+    {
+        audioSource.Play();
+    }
+
+    IEnumerator StopSound()
+    {
+        yield return Util.WaitForSecond(2f);
+
+        audioSource.enabled = false;
     }
 }

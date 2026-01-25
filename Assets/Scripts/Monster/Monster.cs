@@ -2,189 +2,61 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 
-public class Monster : MonoBehaviour, ManagedMonster
-{   
+public class Monster : MonoBehaviour
+{
+    public CharacterData monsterData;
     public TextMeshProUGUI hpText;
 
-    Coroutine stunCoroutine;
-    Coroutine attackCoroutine;
-    Coroutine deadCoroutine;
+    private MonsterMove monsterMove; // ∏ÛΩ∫≈Õ¿« NavMeshAgent ¿Ãµø∞˙ ∞¸∑√«— ƒ⁄µÂ
+    private bool isAlive = true;
+    private float maxHP;
+    private float curHP;
 
-    Coroutine moveCoroutine;
-
-    MonsterManager monsterManager; // Observer
-    Animator animator;
-    Rigidbody rigid;
-    GameObject player;
-    Transform playerTransform;
-    public CharacterData monsterData;
-    public int curHP { get; set; }
-    public bool isAlive { get; set; } = true;
-
-    private Vector3 attackDirection;
-    private bool destroy = false;
-
-    private int nextMove = 0;
-    private float nextThinkTime;
-    private bool isRotating = false;
-    private bool isMoving = false;
-    private Quaternion lookRotation;
-
-    public bool isAttacking { get; set; } = false;
-    public bool isStunned { get; set; } = false;
-    public bool isFollowing = false;
-
-    void Start()
+    private void Start()
     {
-        curHP = monsterData.MaxHP;
-
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerTransform = player.GetComponent<Transform>();
-
-        GameObject managerObject = GameObject.FindGameObjectWithTag("MonsterManager");
-        monsterManager = managerObject.GetComponent<MonsterManager>();
-
-        animator = GetComponent<Animator>();
-        rigid = GetComponent<Rigidbody>();
-
-        UpdateHP();
-
-        nextThinkTime = Random.Range(0f, 5f);
-        Think();
+        monsterMove = GetComponent<MonsterMove>();
+        maxHP = monsterData.MaxHP;
+        curHP = maxHP;
     }
 
-    void FixedUpdate()
+    private void Update()
     {
-        if(destroy) return;
-
-        attackDirection = playerTransform.position - transform.position;
-        float viewAngle = 90f; //ÏòàÎπÑÏö©
-        float angleCos = Mathf.Cos(viewAngle * 0.5f * Mathf.Deg2Rad);
-        //ÌîåÎ†àÏù¥Ïñ¥ Í∞êÏßÄ Ïãú Attack ÏãúÎèÑ
-        if (attackDirection.sqrMagnitude < 100 || 
-            (Vector3.Dot(transform.forward, attackDirection.normalized) >= angleCos && attackDirection.sqrMagnitude < monsterData.AttackRange * monsterData.AttackRange))
-        {
-            Attack(attackDirection.normalized);
-        }
-    }
-
-    void Update()
-    {
-        if(destroy) return;
-
-        if (isRotating)
-        {
-            if(transform.rotation == lookRotation) { isRotating = false; }
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * monsterData.RotationSpeed);
-        }
-
+        //∏ÛΩ∫≈Õ ªÁ∏¡
         if (!isAlive)
         {
-            destroy = true;
-            //CancelInvoke();
-            StopAllCoroutines();
-
-            isAttacking = false;
-            isStunned = false;
-            isMoving = false;
-
-            deadCoroutine = StartCoroutine(DeadAnimation());
-        }
-        else if (!isAttacking && !isStunned && isMoving)
-        {
-            //Debug.Log("UpdateÍ±∑Í∏∞ Î™®Îìú : " + nextMove.ToString());
-            Vector3 moveOffset = transform.forward * monsterData.Speed * Time.fixedDeltaTime * nextMove * 0.1f;
-            rigid.MovePosition(rigid.position + moveOffset);
+            monsterMove.ToDead();
         }
     }
 
-    //Î™¨Ïä§ÌÑ∞ AI Í¥ÄÎ†® Ï∞∏Ï°∞ ÌïÑÏöî
-    public void Attack(Vector3 direction)
+    public void Attacked(int damage, bool hasStun, float stunTime) // «√∑π¿ÃæÓ¿« π´±‚ ≈∏¿‘ ∞¸∑√ ∏≈∞≥∫Øºˆ
     {
         if (!isAlive)
         {
-            return;
-        }
-
-        if (isStunned || isAttacking)
-        {
-            return;
-        }
-
-        //StopAllCoroutines();
-        if (moveCoroutine != null)
-        {
-            StopCoroutine(moveCoroutine);
-            moveCoroutine = null;
-        }
-
-        //if(attackCoroutine != null) moveCoroutine = null;
-
-        lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
-        lookRotation *= Quaternion.Euler(new Vector3(0, -40, 0));
-        isRotating = true;
-
-        //if(attackCoroutine != null) attackCoroutine = null;
-        attackCoroutine = StartCoroutine(AttackAnimation());
-
-        FollowPlayer();
-    }
-    
-    IEnumerator AttackAnimation()
-    {
-        isAttacking = true;
-        animator.SetTrigger("Attack");
-        // Í≥µÍ≤© Î™®ÏÖò
-        yield return Util.WaitForSecond(monsterData.AttackTime / 2);
-        GetComponentInChildren<AttackSpawner>().SpawnAttack(player.transform.position);
-        yield return Util.WaitForSecond(monsterData.AttackTime / 2);
-
-        lookRotation *= Quaternion.Euler(new Vector3(0, 40, 0));
-        isAttacking = false;
-
-        moveCoroutine = StartCoroutine(MoveCoroutine());
-        attackCoroutine = null;
-    }
-
-    public void Attacked(int damage, bool hasStun, float stunTime)
-    {
-        if (!isAlive)
-        {
+            // ∏ÛΩ∫≈Õ∞° ¿ÃπÃ ¡◊¿∫ ªÛ≈¬∂Û∏È Ω««‡«œ¡ˆ æ ¥¬¥Ÿ.
             return;
         }
 
         curHP -= damage;
-        UpdateHP();
-        if(curHP <= 0)
+        UpdateHP(); // ∏ÛΩ∫≈Õ ∞¸∑√ UI æ˜µ•¿Ã∆Æ
+
+        if (curHP <= 0)
         {
             curHP = 0;
             isAlive = false;
         }
-        else if (hasStun)
+        else if (hasStun) // π´±‚∞° stun¿ª ∞… ºˆ ¿÷¥¬ ¡æ∑˘¿Œ ∞ÊøÏ. ¿œπ›¿˚¿∏∑Œ¥¬ false
         {
-            if (moveCoroutine != null)
-            {
-                StopCoroutine(moveCoroutine);
-                moveCoroutine = null;
-            }
-            if (attackCoroutine != null)
-            {
-                StopCoroutine(attackCoroutine);
-                attackCoroutine = null;
-            }
-            isAttacking = false;
-            //isMoving = false;
-            isRotating = false;
-
-            stunCoroutine = StartCoroutine(StunAnimation(stunTime));
+            monsterMove.ToStun(stunTime);
         }
-
-        FollowPlayer();
+        else
+        {
+            monsterMove.ToFollow();
+        }
     }
 
     private void UpdateHP()
     {
-        if(curHP >= 0)
+        if (curHP >= 0)
         {
             hpText.text = curHP.ToString();
         }
@@ -194,126 +66,8 @@ public class Monster : MonoBehaviour, ManagedMonster
         }
     }
 
-    IEnumerator StunAnimation(float stunTime)
+    public void MonsterDestroy()
     {
-        isStunned = true;
-        // ÌîºÍ≤© Î™®ÏÖò
-        animator.SetTrigger("Hit");
-        yield return Util.WaitForSecond(stunTime);
-        isStunned = false;
-
-        moveCoroutine = StartCoroutine(MoveCoroutine());
-        stunCoroutine = null;
-    }
-    
-    IEnumerator DeadAnimation()
-    {
-        //Debug.Log("Í≥®Î†ò ÏÇ¨Îßù!");
-        animator.SetTrigger("Die");
-        yield return Util.WaitForSecond(monsterData.DeadTime);
-        //notify();
-        //Debug.Log("Í≥®Î†ò ÌååÍ¥¥Îê®");
-        monsterManager.AddKills();
         Destroy(gameObject);
-    }
-
-    IEnumerator MoveCoroutine()
-    {
-        if (isFollowing)
-        {
-            moveCoroutine = null;
-            yield break;
-        }
-
-        nextThinkTime = Random.Range(2f, 5f);
-        animator.SetInteger("Walk", nextMove);
-        yield return Util.WaitForSecond(nextThinkTime);
-
-        Think();
-        moveCoroutine = null;
-    }
-
-    void Think()
-    {
-        isMoving = false;
-        isRotating = false;
-
-        if(!isAlive || isAttacking || isStunned || isFollowing)
-        {
-            return;
-        }
-
-        nextMove = Random.Range(0, 2);
-        //Debug.Log("ThinkÍ±∑Í∏∞ Î™®Îìú : " + nextMove.ToString());
-
-        if(nextMove != 0)
-        {
-            float turnAngle = Random.Range(-90.0f, 90.0f);
-            lookRotation = Quaternion.AngleAxis(turnAngle, Vector3.up) * rigid.rotation;
-
-            isMoving = true;
-            isRotating = true;
-        }
-
-        moveCoroutine = StartCoroutine(MoveCoroutine());
-    }
-
-    // Í≥µÍ≤©ÏùÑ ÌïòÍ±∞ÎÇò Í≥µÍ≤©ÎãπÌïòÎäî Í≤ΩÏö∞, ÌîåÎ†àÏù¥Ïñ¥Î•º Ï´ìÏïÑÍ∞ÑÎã§
-    // Í≥µÍ≤© Î≤îÏúÑ ÎÇ¥Î©¥ Í≥µÍ≤©ÌïòÍ≥†, Î©ÄÏñ¥ÏßÄÎ©¥ Ï´ìÏïÑÍ∞ê
-    void FollowPlayer()
-    {
-        isFollowing = true;
-        /*
-        Vector3 direction = transform.position - player.transform.position;
-        float distance = direction.sqrMagnitude;
-
-        isMoving = true;
-        isRotating = true;
-        if (distance > monsterData.AttackRange)
-        {
-            lookRotation = Quaternion.Euler(direction.x, 0, direction.z);
-            isMoving = true;
-            isRotating = true;
-        }*/
-        if (moveCoroutine != null)
-        {
-            StopCoroutine(moveCoroutine);
-            moveCoroutine = null;
-        }
-        StartCoroutine(Following());
-    }
-
-    IEnumerator Following()
-    {
-        while (true)
-        {
-            Vector3 direction = player.transform.position - transform.position; // why not updated...
-            float distance = direction.sqrMagnitude;
-            if ((distance > monsterData.AttackRange * monsterData.AttackRange) && !isAttacking && !isStunned)
-            {
-                direction = direction.normalized;
-                direction.y = 0;
-                lookRotation = Quaternion.LookRotation(direction); 
-
-                nextMove = 1;
-                animator.SetInteger("Walk", nextMove);
-                isMoving = true;
-                isRotating = true;
-            }
-            yield return Util.WaitForSecond(0.01f);
-        }
-    }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Obstacle"))
-        {
-            Think();
-        }
-    }
-
-    public void notify()
-    {
-        // Ïï†Îß§ÌïòÎã§
     }
 }

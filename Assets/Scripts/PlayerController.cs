@@ -1,7 +1,7 @@
-using System.Collections;
-using System.Linq.Expressions;
+
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
@@ -20,6 +20,9 @@ public class PlayerController : MonoBehaviour
     private Vector3 velocity;
 
     public Slider hpSlider;
+    public GameObject GameUI;
+    public GameObject GameOver;
+    public GameObject GameClear;
 
     private Animator playerAnimator;
     private InputAction moveAction;
@@ -33,8 +36,9 @@ public class PlayerController : MonoBehaviour
     //private GunSetting weapon;
 
     private bool crouch = false;
-
     private FootstepSound fs;
+
+    public string gameOver;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
@@ -106,9 +110,12 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(curHp == 0)
+        if(curHp <= 0)
         {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             // 게임 오버
+            SceneManager.LoadScene(gameOver);
         }
 
         if (crouch)
@@ -148,7 +155,7 @@ public class PlayerController : MonoBehaviour
         }
 
         velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+        controller.Move(velocity * Time.deltaTime); 
     }
 
 }

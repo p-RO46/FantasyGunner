@@ -36,7 +36,7 @@ public class InventoryManager : MonoBehaviour
     {
         if (handler.isShooting)
         {
-            Debug.Log("총 발사중엔 교체 불가입니다.");
+            //Debug.Log("총 발사중엔 교체 불가입니다.");
             return;
         }
 
@@ -44,7 +44,7 @@ public class InventoryManager : MonoBehaviour
         {
             if(!initializer && weaponInventory[n - 1].weaponData.gunName.Equals(currentWeapon.weaponData.gunName))
             {
-                Debug.Log("이미 장착 중인 총입니다. 교체를 취소합니다.");
+                //Debug.Log("이미 장착 중인 총입니다. 교체를 취소합니다.");
                 return;
             }
 
@@ -52,21 +52,21 @@ public class InventoryManager : MonoBehaviour
             {
                 handler.isReloading = false;
                 //StopCoroutine(handler.reloadCoroutine);
-                Debug.Log("장전 취소");
+                //Debug.Log("장전 취소");
             }
 
             if (isSwapping)
             {
                 StopCoroutine(swapCoroutine);
                 isSwapping = false;
-                Debug.Log("교체 취소");
+                //Debug.Log("교체 취소");
             }
 
             isSwapping = true;
             if (weaponInventory.Count >= n && n > 0)
             {
                 currentWeapon = weaponInventory[n - 1];
-                Debug.Log("총 교체 시작합니다.");
+                //Debug.Log("총 교체 시작합니다.");
                 handler.EquipGun(currentWeapon);
                 weapon.GetComponent<GunSetting>().SetWeaponData(currentWeapon.weaponData);
                 if (!handler.isReloadingbySwaping)
@@ -77,7 +77,7 @@ public class InventoryManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("인자가 인벤토리 범위를 벗어납니다. 교체 불가");
+            //Debug.Log("인자가 인벤토리 범위를 벗어납니다. 교체 불가");
         }
     }
 
@@ -95,6 +95,6 @@ public class InventoryManager : MonoBehaviour
         weapon.GetComponent<Animator>().SetTrigger("Equip");
         yield return Util.WaitForSecond(currentWeapon.weaponData.equipTime);
         isSwapping = false;
-        Debug.Log("교체 끝");
+        //Debug.Log("교체 끝");
     }
 }

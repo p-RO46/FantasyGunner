@@ -10,6 +10,8 @@ TagManager:
   - Tile
   - Obstacle
   - Water
+  - CS
+  - CSdetect
   layers:
   - Default
   - TransparentFX
@@ -17,16 +19,16 @@ TagManager:
   - 
   - Water
   - UI
+  - CS
+  - CSdetect
+  - Monster
+  - Minimap Layer
+  - Tile
+  - TileObject
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Minimap Icon
   - 
   - 
   - 
@@ -46,6 +48,12 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Minimap Icon
+    uniqueID: 2945995693
+    locked: 0
+  - name: Minimap Layer
+    uniqueID: 592024537
     locked: 0
   m_RenderingLayers:
   - Default

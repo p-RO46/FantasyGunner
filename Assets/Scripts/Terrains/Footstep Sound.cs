@@ -61,24 +61,29 @@ public class FootstepSound : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (isJumping)
+        if (other.gameObject.CompareTag("Tile"))
         {
-            sounds = new List<AudioClip>(ts.terrainData.JumpLand);
-            StopAllCoroutines();
-            StartCoroutine(Footsteps(period));
-            isJumping = false;
+            if (isJumping)
+            {
+                sounds = new List<AudioClip>(ts.terrainData.JumpLand);
+                StopAllCoroutines();
+                StartCoroutine(Footsteps(period));
+                isJumping = false;
+            }
         }
     }
     private void OnTriggerExit(Collider other)
     {
-        if(isJumping)
+        if (other.gameObject.CompareTag("Tile"))
         {
-            sounds = new List<AudioClip>(ts.terrainData.JumpStart);
-            StopAllCoroutines();
-            StartCoroutine(Footsteps(period));
+            if (isJumping)
+            {
+                sounds = new List<AudioClip>(ts.terrainData.JumpStart);
+                StopAllCoroutines();
+                StartCoroutine(Footsteps(period));
+            }
         }
     }
-
     IEnumerator Footsteps(float period)
     {
         playing = true;

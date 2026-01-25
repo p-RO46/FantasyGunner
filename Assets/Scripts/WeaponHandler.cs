@@ -83,7 +83,7 @@ public class WeaponHandler : MonoBehaviour
         ray.direction += WeaponShake();
         RaycastHit hit;
 
-        int layerMask = ~(1 << LayerMask.NameToLayer("Water"));
+        int layerMask = ~(1 << LayerMask.NameToLayer("Water")) & ~(1 << LayerMask.NameToLayer("CSdetect"));
         
         if (Physics.Raycast(ray, out hit, MaxDistance, layerMask))
         {
