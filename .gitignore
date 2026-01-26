@@ -65,7 +65,7 @@ sysinfo.txt
 *.app
 
 # LLM 관련 대용량 파일 제외
-**/StreamingAssets/Llamalib/
+**/StreamingAssets/
 **/LLMUnity/
 *.gguf
 *.bin
