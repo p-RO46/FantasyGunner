@@ -10,6 +10,7 @@ public class WalkerGenerator : MonoBehaviour
     public GameObject minimapFog;
 
     //Variables
+    public GameObject MapTile;
     public Dictionary<string, GameObject> Tiles;
     public Dictionary<string, TerrainData> FloorDatas;
     public TerrainData Water; //wall
@@ -19,6 +20,8 @@ public class WalkerGenerator : MonoBehaviour
 
     public TerrainData[,] gridHandler; //x,y `positions
     public List<WalkerObject> Walkers; //List of custom walker class
+
+    private int[,,] extendedArray;
 
     private int floorNumber;
     private Dictionary<string, TerrainData> TerrainDatas;
@@ -49,12 +52,12 @@ public class WalkerGenerator : MonoBehaviour
         FloorDatas = new Dictionary<string, TerrainData>();
 
         MapDatas mapDatas = GetComponent<MapDatas>();
-        for(int i = 0; i < mapDatas.Tiles.Count; i++)
+        for (int i = 0; i < mapDatas.Tiles.Count; i++)
         {
             GameObject t = mapDatas.Tiles[i];
             Tiles.Add(t.GetComponent<TerrainSetting>().terrainData.Type, t);
         }
-        for(int i = 0; i < mapDatas.Terrains.Count; i++)
+        for (int i = 0; i < mapDatas.Terrains.Count; i++)
         {
             TerrainData t = mapDatas.Terrains[i];
             FloorDatas.Add(t.Type, t);
@@ -63,18 +66,18 @@ public class WalkerGenerator : MonoBehaviour
         floorNumber = FloorDatas.Count;
         gridHandler = new TerrainData[MapWidth, MapHeight];
         TerrainDatas = new Dictionary<string, TerrainData>();
-        foreach(KeyValuePair<string, TerrainData> item in FloorDatas)
+        foreach (KeyValuePair<string, TerrainData> item in FloorDatas)
         {
             TerrainDatas.Add(item.Key, item.Value);
         }
         TerrainDatas.Add("Water", Water);
         TerrainDatas.Add("Empty", Empty);
 
-        for(int x = 0; x < gridHandler.GetLength(0); x++)
+        for (int x = 0; x < gridHandler.GetLength(0); x++)
         {
             for (int y = 0; y < gridHandler.GetLength(1); y++)
             {
-                gridHandler[x,y] = Empty;
+                gridHandler[x, y] = Empty;
             }
         }
 
@@ -100,15 +103,15 @@ public class WalkerGenerator : MonoBehaviour
         switch (choice)
         {
             case 0:
-            return Vector2.down;
+                return Vector2.down;
             case 1:
-            return Vector2.left;
+                return Vector2.left;
             case 2:
-            return Vector2.up;
+                return Vector2.up;
             case 3:
-            return Vector2.right;
+                return Vector2.right;
             default:
-            return Vector2.zero;
+                return Vector2.zero;
         }
     }
 
@@ -117,9 +120,9 @@ public class WalkerGenerator : MonoBehaviour
         int choice = Random.Range(0, floorNumber);
 
         int iteration = 0;
-        foreach(TerrainData T in FloorDatas.Values)
+        foreach (TerrainData T in FloorDatas.Values)
         {
-            if(choice == iteration) return T;
+            if (choice == iteration) return T;
             iteration++;
         }
         return Empty;
@@ -128,20 +131,20 @@ public class WalkerGenerator : MonoBehaviour
     TerrainData GetTerrainType(WalkerObject pre)
     {
         Dictionary<string, TerrainData> WeightedRandom = new Dictionary<string, TerrainData>();
-        foreach(KeyValuePair<string, TerrainData> item in FloorDatas)
+        foreach (KeyValuePair<string, TerrainData> item in FloorDatas)
         {
             WeightedRandom.Add(item.Key, item.Value);
         }
-        for(int i = 0; i < weight; i++)
+        for (int i = 0; i < weight; i++)
         {
             WeightedRandom.Add(i.ToString(), pre.Type);
         }
 
         int choice = UnityEngine.Random.Range(0, WeightedRandom.Count);
         int iteration = 0;
-        foreach(TerrainData T in WeightedRandom.Values)
+        foreach (TerrainData T in WeightedRandom.Values)
         {
-            if(choice == iteration) return T;
+            if (choice == iteration) return T;
             iteration++;
         }
         return Empty;
@@ -152,17 +155,17 @@ public class WalkerGenerator : MonoBehaviour
         while ((float)TileCount / (float)gridHandler.Length < FillPercentage)
         {
             bool hasCreatedFloor = false;
-            foreach(WalkerObject curWalker in Walkers)
+            foreach (WalkerObject curWalker in Walkers)
             {
                 Vector3Int curPos = new Vector3Int((int)curWalker.Position.x, (int)curWalker.Position.y, 0);
 
-                if(!gridHandler[curPos.x, curPos.y].Walkable)
+                if (!gridHandler[curPos.x, curPos.y].Walkable)
                 {
                     gridHandler[curPos.x, curPos.y] = curWalker.Type;
                     TileCount++;
                     hasCreatedFloor = true;
                 }
-            }   
+            }
             //Walker Methods
             ChanceToRemove();
             ChanceToRedirect();
@@ -182,9 +185,9 @@ public class WalkerGenerator : MonoBehaviour
     void ChanceToRemove()
     {
         int updatedCount = Walkers.Count;
-        for(int i = 0; i < updatedCount; i++)
+        for (int i = 0; i < updatedCount; i++)
         {
-            if(UnityEngine.Random.value < Walkers[i].ChanceToChange && Walkers.Count > 1)
+            if (UnityEngine.Random.value < Walkers[i].ChanceToChange && Walkers.Count > 1)
             {
                 Walkers.RemoveAt(i);
                 break;
@@ -194,7 +197,7 @@ public class WalkerGenerator : MonoBehaviour
 
     void ChanceToRedirect()
     {
-        for(int i = 0; i<Walkers.Count; i++)
+        for (int i = 0; i < Walkers.Count; i++)
         {
             if (Random.value < Walkers[i].ChanceToChange)
             {
@@ -208,9 +211,9 @@ public class WalkerGenerator : MonoBehaviour
     void ChanceToCreate()
     {
         int updatedCount = Walkers.Count;
-        for(int i= 0; i<updatedCount; i++)
+        for (int i = 0; i < updatedCount; i++)
         {
-            if(Random.value < Walkers[i].ChanceToChange && Walkers.Count < MaximumWalkers)
+            if (Random.value < Walkers[i].ChanceToChange && Walkers.Count < MaximumWalkers)
             {
                 Vector2 newDirection = GetDirection();
                 Vector2 newPosition = Walkers[i].Position;
@@ -223,7 +226,7 @@ public class WalkerGenerator : MonoBehaviour
 
     void UpdatePosition()
     {
-        for(int i = 0; i<Walkers.Count; i++)
+        for (int i = 0; i < Walkers.Count; i++)
         {
             WalkerObject FoundWalker = Walkers[i];
             FoundWalker.Position += FoundWalker.Direction;
@@ -235,32 +238,32 @@ public class WalkerGenerator : MonoBehaviour
 
     IEnumerator CreateWalls()
     {
-        for(int x = 0; x < gridHandler.GetLength(0) - 1; x++)
+        for (int x = 0; x < gridHandler.GetLength(0) - 1; x++)
         {
-            for(int y = 0; y < gridHandler.GetLength(1) - 1; y++)
+            for (int y = 0; y < gridHandler.GetLength(1) - 1; y++)
             {
-                if(gridHandler[x,y].Walkable)
+                if (gridHandler[x, y].Walkable)
                 {
                     bool hasCreatedWalls = false;
 
-                    if (gridHandler[x+1, y].isEmpty)
+                    if (gridHandler[x + 1, y].isEmpty)
                     {
-                        gridHandler[x+1, y] = Water;
+                        gridHandler[x + 1, y] = Water;
                         hasCreatedWalls = true;
                     }
-                    if(gridHandler[x-1, y].isEmpty)
+                    if (gridHandler[x - 1, y].isEmpty)
                     {
-                        gridHandler[x-1, y] = Water;
+                        gridHandler[x - 1, y] = Water;
                         hasCreatedWalls = true;
                     }
-                    if(gridHandler[x,y+1].isEmpty)
+                    if (gridHandler[x, y + 1].isEmpty)
                     {
-                        gridHandler[x, y+1] = Water;
+                        gridHandler[x, y + 1] = Water;
                         hasCreatedWalls = true;
                     }
-                    if(gridHandler[x,y-1].isEmpty)
+                    if (gridHandler[x, y - 1].isEmpty)
                     {
-                        gridHandler[x, y-1] = Water;
+                        gridHandler[x, y - 1] = Water;
                         hasCreatedWalls = true;
                     }
 
@@ -277,13 +280,22 @@ public class WalkerGenerator : MonoBehaviour
 
     void SetTiles()
     {
-        for (int x = 0; x < gridHandler.GetLength(0); x++)
+        extendedArray = new int[MapWidth, MapHeight, 4];
+        BlendingTileSetter();
+
+        for (int x = 0; x < extendedArray.GetLength(0); x++)
         {
-            for (int y = 0; y < gridHandler.GetLength(1); y++)
+            for (int y = 0; y < extendedArray.GetLength(1); y++)
             {
-                GameObject tile = Instantiate(Tiles[gridHandler[x, y].Type],
-                new Vector3(TileWidth * x - MapWidth * TileWidth / 2, 0, TileHeight * y - MapHeight * TileHeight / 2),
+                GameObject tile = Instantiate(MapTile, new Vector3(TileWidth * x - MapWidth * TileWidth / 2, 0, TileHeight * y - MapHeight * TileHeight / 2),
                 Quaternion.identity, transform);
+
+                tile.GetComponent<TerrainSetting>().terrainData = gridHandler[x, y];
+                TileTextureSetter tts = tile.GetComponent<TileTextureSetter>();
+                tts.lt = extendedArray[x, y, 0];
+                tts.rt = extendedArray[x, y, 1];
+                tts.lb = extendedArray[x, y, 2];
+                tts.rb = extendedArray[x, y, 3];
 
                 manager.addTile(tile, x, y);
 
@@ -297,5 +309,90 @@ public class WalkerGenerator : MonoBehaviour
         minimapFog.transform.localScale = new Vector3(TileWidth * MapWidth, 1, TileHeight * MapHeight);
 
         manager.SettingCompleted();
+    }
+
+    void BlendingTileSetter() // 아름다운 타일 세팅
+    {
+        // 한 칸을 4개로 나눔
+        int[,,] extendedArray = new int[MapWidth, MapHeight, 4];
+
+        for (int i = 0; i < extendedArray.GetLength(0); i++)
+        {
+            for (int j = 0; j < extendedArray.GetLength(1); j++)
+            {
+                for (int k = 0; k < 4; k++)
+                {
+                    extendedArray[i, j, 4] = gridHandler[i, j].TileIndex;
+                }
+            }
+        }
+
+        // 타일 가짓수는 그렇게 상관이 없음?
+        // 아직까진 인스턴스 생성 안함.
+        for (int i = 0; i < extendedArray.GetLength(0); i++)
+        {
+            for (int j = 0; j < extendedArray.GetLength(1); j++)
+            {
+                //주변 tile을 검사...
+                // 0
+                if (j - 1 >= 0)
+                { //1
+                    extendedArray[i, j - 1, 1] = extendedArray[i, j, 0];
+                }
+                if (i - 1 >= 0)
+                { //2
+                    extendedArray[i - 1, j, 2] = extendedArray[i, j, 0];
+                }
+                if (i - 1 >= 0 && j - 1 >= 0)
+                { //3
+                    extendedArray[i - 1, j - 1, 3] = extendedArray[i, j, 0];
+                }
+
+                // 1
+                if (j + 1 < extendedArray.GetLength(1))
+                { //0
+                    extendedArray[i, j + 1, 0] = extendedArray[i, j, 1];
+                }
+                if (i - 1 >= 0 && j + 1 < extendedArray.GetLength(1))
+                { //2
+                    extendedArray[i - 1, j + 1, 2] = extendedArray[i, j, 1];
+                }
+                if (i - 1 >= 0)
+                { //3
+                    extendedArray[i - 1, j, 3] = extendedArray[i, j, 1];
+                }
+
+                // 2
+                if (i + 1 < extendedArray.GetLength(0))
+                { //0
+                    extendedArray[i + 1, j, 0] = extendedArray[i, j, 2];
+                }
+                if (i + 1 < extendedArray.GetLength(0) && j - 1 >= 0)
+                { //1
+                    extendedArray[i + 1, j - 1, 1] = extendedArray[i, j, 2];
+                }
+                if (j - 1 >= 0)
+                { //3
+                    extendedArray[i, j - 1, 3] = extendedArray[i, j, 2];
+                }
+
+                // 3
+                if (i + 1 < extendedArray.GetLength(0) && j + 1 < extendedArray.GetLength(1))
+                { //0
+                    extendedArray[i + 1, j + 1, 0] = extendedArray[i, j, 3];
+                }
+                if (i + 1 < extendedArray.GetLength(0))
+                { //1
+                    extendedArray[i + 1, j, 1] = extendedArray[i, j, 3];
+                }
+                if (j + 1 < extendedArray.GetLength(1))
+                { //2
+                    extendedArray[i, j + 1, 2] = extendedArray[i, j, 3];
+                }
+            }
+        }
+
+        // 이제 확장판 배열을 기준으로 실제 타일을 배치해줄 거임
+        // 그리고 아직 해결되지 않은 <흐르는 물>...
     }
 }

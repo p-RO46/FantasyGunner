@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 7503c99bef6ebf6499a4411bbec06d36
+AssetOrigin:
+  serializedVersion: 1
+  productId: 308032
+  packageName: Janky Array Maker
+  packageVersion: 1.0.0
+  assetPath: Assets/Janky/Janky Window/Scripts/Editor/JankyStartupWindow.cs
+  uploadId: 731556

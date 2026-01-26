@@ -13,6 +13,7 @@ public class TerrainData : ScriptableObject
     public float Difficulty;
     public Material TerrainMaterial;
     public GameObject SpawnMonster;
+    public int TileIndex = 0; // tile texture¸¦ °áÁ¤Áþ´Â ÀÎµ¦½º. Grass:0 Ground:1 Lava:2 Water:3
 
     [Header("Objects")]
     public List<GameObject> ObjectList1;

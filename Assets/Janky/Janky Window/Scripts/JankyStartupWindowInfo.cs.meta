@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: cf617ee25c065d043b66daaeca4c4705
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 308032
+  packageName: Janky Array Maker
+  packageVersion: 1.0.0
+  assetPath: Assets/Janky/Janky Window/Scripts/JankyStartupWindowInfo.cs
+  uploadId: 731556

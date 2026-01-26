@@ -1,0 +1,20 @@
+Thanks for purchasing Janky Array Maker!!!
+
+Creating a new Array Maker Scriptable Object:
+
+1) In the unity toolbar go to Assets > Create > Janky > Janky Array Maker > Create New
+2) Select the newly created Array Maker Scriptable Object
+3) Set Array Name to an appropriate name and a output resolution (1:1 ratio)
+4) Select the folder you would like your arrays to be exported to
+5) Add Texture types (Diffuse, Normal, Height)
+6) Add Materials (Each material has an input for each texture type)
+7) Modify each texture as required using the corrisponding "Options" dropdown
+8) Once you have finished press "Create Arrays"
+
+NOTE: Each Texture type will be exported to a different 2d texture array
+
+Reviews help me continue to develop Janky Array Maker.
+
+I am always open to feedback and love your input so get in touch and I'll get back to you as soon as I can.
+
+For feedback or more info you can reach out to me directly at Janky.gamesmiths@gmail.com

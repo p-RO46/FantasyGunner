@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf617ee25c065d043b66daaeca4c4705, type: 3}
+  m_Name: WindowInfo_JAM
+  m_EditorClassIdentifier: 
+  title: Janky Array Maker
+  logo: {fileID: 21300000, guid: 3ea7941c21316214196f59d4abf188a1, type: 3}
+  description: Janky Array Maker lets you create, export, and remember multiple texture
+    arrays from one convenient scriptable object.
+  viewInAssetStoreVisible: 1
+  viewInAssetStoreLink: https://u3d.as/3sxg
+  documentationVisible: 0
+  documentationLink: 
+  exampleVisible: 0
+  exampleLink: 
