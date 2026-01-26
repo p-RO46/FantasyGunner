@@ -15,6 +15,8 @@ MonoBehaviour:
   gunName: Shotgun
   damage: 100
   equipTime: 1
+  scrapPrice: 100
+  icon: {fileID: 0}
   canContinuousFire: 0
   hasScope: 0
   verticalForce: 90
@@ -23,6 +25,7 @@ MonoBehaviour:
   fireRate: 0
   hasStun: 1
   stunTime: 0.5
+  fittedAmmo: {fileID: 0}
   maxAmmo: 10
   loadAmmo: 2
   reloadTime: 2

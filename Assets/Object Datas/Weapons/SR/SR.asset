@@ -15,6 +15,8 @@ MonoBehaviour:
   gunName: Sniper Rifle
   damage: 100
   equipTime: 1
+  scrapPrice: 250
+  icon: {fileID: 0}
   canContinuousFire: 0
   hasScope: 1
   verticalForce: 200
@@ -23,6 +25,7 @@ MonoBehaviour:
   fireRate: 0
   hasStun: 1
   stunTime: 0.5
+  fittedAmmo: {fileID: 0}
   maxAmmo: 20
   loadAmmo: 1
   reloadTime: 2

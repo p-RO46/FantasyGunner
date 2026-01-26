@@ -1,30 +1,49 @@
-using NUnit.Framework;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
 {
+    [SerializeField]
     private int _scraps;
+    [SerializeField]
     private List<WeaponData> _ownWeapons;
+    [SerializeField]
     private List<Ammos> _ownAmmos;
+    [SerializeField]
     private List<Items> _ownItems;
+
+    public TextMeshProUGUI scrapText;
+
+    void UpdateScrap()
+    {
+        scrapText.text = "Scrap: $" + _scraps;
+    }
+
+    public int GetScrap()
+    {
+        return _scraps;
+    }
 
     public void AddScrap(int amount)
     {
         _scraps += amount;
+        UpdateScrap();
     }
 
     #region AddItems
-    public void AddWeapon(WeaponData weapon)
+    public bool AddWeapon(WeaponData weapon)
     {
         bool hasWeapon = _ownWeapons.Exists(x => x.gunName.Equals(weapon.gunName));
         if (!hasWeapon)
         {
             _ownWeapons.Add(weapon);
+            return true;
         }
         else
         {
             Debug.Log("AddWeapon : 이미 가지고 있는 총입니다.");
+            return false;
         }
     }
 
@@ -59,6 +78,7 @@ public class PlayerInventory : MonoBehaviour
     public void UseScrap(int amount) // 스크랩 사용
     {
         _scraps -= amount;
+        UpdateScrap();
     }
 
     public void LostWeapon(WeaponData weapon) // 총 버림

@@ -1,5 +1,6 @@
-using System.Collections.Generic;
+using System;
 
+[Serializable]
 public class Items
 {
     public ItemData item;

@@ -6,6 +6,7 @@ public class AmmoData : ScriptableObject
 {
     public string ammoName;
     public int scrapPrice;
+    public int count;
     public Sprite icon;
     public List<WeaponData> fittedGuns;
 }
