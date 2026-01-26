@@ -14,5 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Terrain
   Type: Water
   Walkable: 0
+  isEmpty: 0
   Difficulty: 0
   TerrainMaterial: {fileID: 2100000, guid: 965b7c5c9e10a924ba4182a967639902, type: 2}
+  SpawnMonster: {fileID: 0}
+  TileIndex: 3
+  ObjectList1: []
+  ObjectList2: []
+  ObjectList3: []
+  Walk: []
+  Run: []
+  JumpStart: []
+  JumpLand: []

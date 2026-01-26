@@ -11,7 +11,8 @@ public class WalkerGenerator : MonoBehaviour
 
     //Variables
     public GameObject MapTile;
-    public Dictionary<string, GameObject> Tiles;
+    public GameObject EmptyTile;
+
     public Dictionary<string, TerrainData> FloorDatas;
     public TerrainData Water; //wall
     public TerrainData Empty; //empty
@@ -24,7 +25,8 @@ public class WalkerGenerator : MonoBehaviour
     private int[,,] extendedArray;
 
     private int floorNumber;
-    private Dictionary<string, TerrainData> TerrainDatas;
+
+    public Dictionary<string, TerrainData> TerrainDatas;
 
     public int MapWidth = 30;
     public int MapHeight = 30;
@@ -48,15 +50,9 @@ public class WalkerGenerator : MonoBehaviour
 
     public void InitializeGrid()
     {
-        Tiles = new Dictionary<string, GameObject>();
         FloorDatas = new Dictionary<string, TerrainData>();
 
         MapDatas mapDatas = GetComponent<MapDatas>();
-        for (int i = 0; i < mapDatas.Tiles.Count; i++)
-        {
-            GameObject t = mapDatas.Tiles[i];
-            Tiles.Add(t.GetComponent<TerrainSetting>().terrainData.Type, t);
-        }
         for (int i = 0; i < mapDatas.Terrains.Count; i++)
         {
             TerrainData t = mapDatas.Terrains[i];
@@ -267,6 +263,27 @@ public class WalkerGenerator : MonoBehaviour
                         hasCreatedWalls = true;
                     }
 
+                    if (gridHandler[x - 1, y - 1].isEmpty)
+                    {
+                        gridHandler[x - 1, y - 1] = Water;
+                        hasCreatedWalls = true;
+                    }
+                    if (gridHandler[x - 1, y + 1].isEmpty)
+                    {
+                        gridHandler[x - 1, y + 1] = Water;
+                        hasCreatedWalls = true;
+                    }
+                    if (gridHandler[x + 1, y - 1].isEmpty)
+                    {
+                        gridHandler[x + 1, y - 1] = Water;
+                        hasCreatedWalls = true;
+                    }
+                    if (gridHandler[x + 1, y + 1].isEmpty)
+                    {
+                        gridHandler[x + 1, y + 1] = Water;
+                        hasCreatedWalls = true;
+                    }
+
                     if (hasCreatedWalls)
                     {
                         yield return Util.WaitForSecond(WaitTime);
@@ -287,16 +304,29 @@ public class WalkerGenerator : MonoBehaviour
         {
             for (int y = 0; y < extendedArray.GetLength(1); y++)
             {
-                GameObject tile = Instantiate(MapTile, new Vector3(TileWidth * x - MapWidth * TileWidth / 2, 0, TileHeight * y - MapHeight * TileHeight / 2),
-                Quaternion.identity, transform);
+                GameObject tile;
+                if (gridHandler[x, y].Type.Equals("Empty"))
+                {
+                    tile = Instantiate(EmptyTile, new Vector3(TileWidth * x - MapWidth * TileWidth / 2, 0, TileHeight * y - MapHeight * TileHeight / 2),
+                                        Quaternion.identity, transform);
+                }
+                else
+                {
+                    tile = Instantiate(MapTile, new Vector3(TileWidth * x - MapWidth * TileWidth / 2, 0, TileHeight * y - MapHeight * TileHeight / 2),
+                                            Quaternion.identity, transform);
 
-                tile.GetComponent<TerrainSetting>().terrainData = gridHandler[x, y];
-                TileTextureSetter tts = tile.GetComponent<TileTextureSetter>();
-                tts.lt = extendedArray[x, y, 0];
-                tts.rt = extendedArray[x, y, 1];
-                tts.lb = extendedArray[x, y, 2];
-                tts.rb = extendedArray[x, y, 3];
+                    tile.GetComponent<TerrainSetting>().terrainData = gridHandler[x, y];
+                    tile.GetComponent<TileTextureSetter>().SetColors(extendedArray[x, y, 1], extendedArray[x, y, 3], extendedArray[x, y, 0], extendedArray[x, y, 2]);
 
+                    int k = 0;
+                    foreach (Transform child in tile.transform)
+                    {
+                        if (!gridHandler[x, y].Type.Equals("Empty") && extendedArray[x, y, k++] == 3) // water
+                        {
+                            child.gameObject.SetActive(true);
+                        }
+                    }
+                }
                 manager.addTile(tile, x, y);
 
                 if (gridHandler[x, y].Walkable && Random.Range(0, 30) == 0)
@@ -314,7 +344,7 @@ public class WalkerGenerator : MonoBehaviour
     void BlendingTileSetter() // 아름다운 타일 세팅
     {
         // 한 칸을 4개로 나눔
-        int[,,] extendedArray = new int[MapWidth, MapHeight, 4];
+        extendedArray = new int[MapWidth, MapHeight, 4];
 
         for (int i = 0; i < extendedArray.GetLength(0); i++)
         {
@@ -322,11 +352,11 @@ public class WalkerGenerator : MonoBehaviour
             {
                 for (int k = 0; k < 4; k++)
                 {
-                    extendedArray[i, j, 4] = gridHandler[i, j].TileIndex;
+                    extendedArray[i, j, k] = gridHandler[i, j].TileIndex;
                 }
             }
         }
-
+        
         // 타일 가짓수는 그렇게 상관이 없음?
         // 아직까진 인스턴스 생성 안함.
         for (int i = 0; i < extendedArray.GetLength(0); i++)
@@ -334,6 +364,7 @@ public class WalkerGenerator : MonoBehaviour
             for (int j = 0; j < extendedArray.GetLength(1); j++)
             {
                 //주변 tile을 검사...
+                
                 // 0
                 if (j - 1 >= 0)
                 { //1
@@ -347,12 +378,13 @@ public class WalkerGenerator : MonoBehaviour
                 { //3
                     extendedArray[i - 1, j - 1, 3] = extendedArray[i, j, 0];
                 }
-
+                
                 // 1
                 if (j + 1 < extendedArray.GetLength(1))
                 { //0
                     extendedArray[i, j + 1, 0] = extendedArray[i, j, 1];
                 }
+                
                 if (i - 1 >= 0 && j + 1 < extendedArray.GetLength(1))
                 { //2
                     extendedArray[i - 1, j + 1, 2] = extendedArray[i, j, 1];
@@ -361,12 +393,14 @@ public class WalkerGenerator : MonoBehaviour
                 { //3
                     extendedArray[i - 1, j, 3] = extendedArray[i, j, 1];
                 }
+                
 
                 // 2
                 if (i + 1 < extendedArray.GetLength(0))
                 { //0
                     extendedArray[i + 1, j, 0] = extendedArray[i, j, 2];
                 }
+                
                 if (i + 1 < extendedArray.GetLength(0) && j - 1 >= 0)
                 { //1
                     extendedArray[i + 1, j - 1, 1] = extendedArray[i, j, 2];
@@ -375,6 +409,7 @@ public class WalkerGenerator : MonoBehaviour
                 { //3
                     extendedArray[i, j - 1, 3] = extendedArray[i, j, 2];
                 }
+                
 
                 // 3
                 if (i + 1 < extendedArray.GetLength(0) && j + 1 < extendedArray.GetLength(1))
@@ -391,7 +426,6 @@ public class WalkerGenerator : MonoBehaviour
                 }
             }
         }
-
         // 이제 확장판 배열을 기준으로 실제 타일을 배치해줄 거임
         // 그리고 아직 해결되지 않은 <흐르는 물>...
     }

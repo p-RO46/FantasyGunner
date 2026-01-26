@@ -106,10 +106,26 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TB4B_538fa9361ec347bfbd23ff0a2da7eddd_Diffuse_3529864947_Texture2DArray:
-        m_Texture: {fileID: 18700000, guid: c825b7b7e4c096e49a8a22c30d878b1e, type: 2}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TB4B_538fa9361ec347bfbd23ff0a2da7eddd_Height_195837528_Texture2DArray:
+        m_Texture: {fileID: 18700000, guid: 57ef5f1e2f162c64ea6b02c6f57b3fc4, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TB4B_5747457106c748609577f92c29574890_Diffuse_3529864947_Texture2DArray:
+        m_Texture: {fileID: 18700000, guid: 36a506f30512300498acc711994aee56, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TB4B_5747457106c748609577f92c29574890_Height_195837528_Texture2DArray:
+        m_Texture: {fileID: 18700000, guid: 57ef5f1e2f162c64ea6b02c6f57b3fc4, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TB4B_8d67947c35584677b35f258f8aa7a928_Diffuse_3529864947_Texture2DArray:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TB4B_8d67947c35584677b35f258f8aa7a928_Height_195837528_Texture2DArray:
         m_Texture: {fileID: 18700000, guid: 57ef5f1e2f162c64ea6b02c6f57b3fc4, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -122,7 +138,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TB4Base_c67015a9068d491bbad479fde80d163c_Diffuse_3529864947_Texture2DArray:
-        m_Texture: {fileID: 18700000, guid: c825b7b7e4c096e49a8a22c30d878b1e, type: 2}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TB4Base_c67015a9068d491bbad479fde80d163c_Height_195837528_Texture2DArray:
@@ -138,11 +154,19 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TB4N_8d67947c35584677b35f258f8aa7a928_Diffuse_3529864947_Texture2DArray:
-        m_Texture: {fileID: 18700000, guid: c825b7b7e4c096e49a8a22c30d878b1e, type: 2}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TB4N_8d67947c35584677b35f258f8aa7a928_Height_195837528_Texture2DArray:
         m_Texture: {fileID: 18700000, guid: 57ef5f1e2f162c64ea6b02c6f57b3fc4, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TB4N_a9f490138aac459ea0ff8c023e818a26_Height_195837528_Texture2DArray:
+        m_Texture: {fileID: 18700000, guid: 57ef5f1e2f162c64ea6b02c6f57b3fc4, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TB4N_a9f490138aac459ea0ff8c023e818a26_Normal_3529864947_Texture2DArray:
+        m_Texture: {fileID: 18700000, guid: c825b7b7e4c096e49a8a22c30d878b1e, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TB4S_33face8d5c824961baa17c04150c0a47_Diffuse_3529864947_Texture2DArray:
@@ -158,7 +182,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TB4S_c67015a9068d491bbad479fde80d163c_Diffuse_3529864947_Texture2DArray:
-        m_Texture: {fileID: 18700000, guid: c825b7b7e4c096e49a8a22c30d878b1e, type: 2}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TB4S_c67015a9068d491bbad479fde80d163c_Height_195837528_Texture2DArray:

@@ -17,3 +17,12 @@ MonoBehaviour:
   isEmpty: 1
   Difficulty: 0
   TerrainMaterial: {fileID: 2100000, guid: c005841b7f6c3f74199fc99109ef6dd6, type: 2}
+  SpawnMonster: {fileID: 0}
+  TileIndex: 3
+  ObjectList1: []
+  ObjectList2: []
+  ObjectList3: []
+  Walk: []
+  Run: []
+  JumpStart: []
+  JumpLand: []

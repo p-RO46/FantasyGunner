@@ -14,7 +14,7 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
-  m_Fog: 1
+  m_Fog: 0
   m_FogColor: {r: 0.5019608, g: 0.5019608, b: 0.5058824, a: 1}
   m_FogMode: 1
   m_FogDensity: 0.01
@@ -94,7 +94,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000000, guid: 38a0c99915c04e74fa30a0ee827d8102, type: 2}
-  m_LightingSettings: {fileID: 4890085278179872738, guid: 080f70ef43e341e4bafa8e663b57428b, type: 2}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: eeb7592dc3d27814f99c73a7a3fe3698, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -152,6 +152,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 391856201}
     - target: {fileID: 3825990513149817916, guid: 849ee737a0dfa524ab397d02fa80320f, type: 3}
+      propertyPath: maxHp
+      value: 10000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3825990513149817916, guid: 849ee737a0dfa524ab397d02fa80320f, type: 3}
       propertyPath: GameUI
       value: 
       objectReference: {fileID: 1051674961}
@@ -197,6 +201,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5162693809724173816, guid: 849ee737a0dfa524ab397d02fa80320f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5412181321887799551, guid: 849ee737a0dfa524ab397d02fa80320f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8884040146603629716, guid: 849ee737a0dfa524ab397d02fa80320f, type: 3}
+      propertyPath: m_UseGravity
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -991,14 +1003,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b67b66c29f710a6489c2333e16dfa0a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapDatas
-  Tiles:
-  - {fileID: 2124741444108904875, guid: 5c483851f0ca3e646b5aee2579bd38d4, type: 3}
-  - {fileID: 2124741444108904875, guid: caafe66c7981f8242a1bf8a0963aac9c, type: 3}
-  - {fileID: 2124741444108904875, guid: 2276e0e3afe40bc4db784c1f476ffc5e, type: 3}
-  - {fileID: 2124741444108904875, guid: 6ff007aa421463b46b117f84ccd6e7bc, type: 3}
-  - {fileID: 2124741444108904875, guid: ca55bf8c7e263b64e9692046312b6402, type: 3}
   Terrains:
   - {fileID: 11400000, guid: 0a52690181ea64546aeacaaf5f77ce41, type: 2}
+  - {fileID: 11400000, guid: 760fe65ad93dfdc4fac7b9c0eba216db, type: 2}
 --- !u!114 &2136508558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1013,6 +1020,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WalkerGenerator
   minimapFog: {fileID: 3041061243331385027}
   MapTile: {fileID: 416358273002919053, guid: aca73abde9316884399d99816ee0285d, type: 3}
+  EmptyTile: {fileID: 2124741444108904875, guid: ca55bf8c7e263b64e9692046312b6402, type: 3}
   Water: {fileID: 11400000, guid: ed5332863e43a0d43870c8c66fdc734a, type: 2}
   Empty: {fileID: 11400000, guid: aaa955ee3ead25f4b8b1b0f8f45a94bd, type: 2}
   monsterManager: {fileID: 1483458402}
@@ -1274,7 +1282,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &3041061243331385028
 MeshCollider:
   m_ObjectHideFlags: 0
