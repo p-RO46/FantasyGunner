@@ -7,10 +7,12 @@ public class SupplierEvent : MonoBehaviour
     private ItemData ItemBuy;
     public int count = 1;
 
-    public Canvas StoreUI;
+    public GameObject StoreUI;
 
     private PlayerInventory pi;
     private ItemAll itemAll;
+
+    private bool isOpened = false; // Store UI
 
     private void Start()
     {
@@ -18,9 +20,26 @@ public class SupplierEvent : MonoBehaviour
         itemAll = GetComponent<ItemAll>();
     }
 
-    public void ExitWindow()
+    public void OpenStore()
     {
-        StoreUI.enabled = false;
+        isOpened = true; // 상태 반전
+        StoreUI.SetActive(isOpened); // 상태에 따라 켜거나 끔
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        // 필요하다면 게임 일시정지
+        Time.timeScale = 0f;
+    }
+
+    public void ExitStore()
+    {
+        isOpened = false; // 상태 반전
+        StoreUI.SetActive(isOpened); // 상태에 따라 켜거나 끔
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        // 게임 다시 시작
+        Time.timeScale = 1f;
     }
 
     #region BuyWeapons

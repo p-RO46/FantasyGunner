@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -5,22 +6,65 @@ using UnityEngine;
 public class PlayerInventory : MonoBehaviour
 {
     [SerializeField]
-    private int _scraps;
+    private int _scraps = 0;
     [SerializeField]
     private List<WeaponData> _ownWeapons;
     [SerializeField]
     private List<Ammos> _ownAmmos;
     [SerializeField]
     private List<Items> _ownItems;
+    [SerializeField]
+    private Items _ownKeys;
 
     public TextMeshProUGUI scrapText;
+    public TextMeshProUGUI keyText;
+    public InventoryUI inventoryUI;
 
-    void UpdateScrap()
+    public ItemData key; // 열쇠 데이터는 특별하게 다룬다...
+
+    private void Start()
     {
-        scrapText.text = "Scrap: $" + _scraps;
+        _ownKeys = new Items(key, 0);
+        UpdateScrap();
     }
 
-    public int GetScrap()
+    #region Key
+    void UpdateKey()
+    {
+        keyText.text = _ownKeys.count.ToString();
+    }
+    public void AddKey()
+    {
+        _ownKeys.count++;
+        UpdateKey();
+    }
+    public void AddKeys(ItemData item, int count)
+    {
+        _ownKeys.count += count;
+        UpdateKey();
+    }
+    public void UseKey()
+    {
+        _ownKeys.count--;
+        UpdateKey();
+    }
+    public bool ExistKey()
+    {
+        if(_ownKeys.count > 0)
+        {
+            return true;
+        }
+        return false;
+    }
+    #endregion
+
+    #region Scrap
+    void UpdateScrap()
+    {
+        scrapText.text = _scraps.ToString();
+    }
+
+    public float GetScrap()
     {
         return _scraps;
     }
@@ -30,6 +74,40 @@ public class PlayerInventory : MonoBehaviour
         _scraps += amount;
         UpdateScrap();
     }
+    #endregion
+
+    #region GetItems
+    public WeaponData GetWeapons(int index)
+    {
+        if(index < _ownWeapons.Count && index >= 0)
+        {
+            return _ownWeapons[index];
+        }
+
+        return null;
+    }
+
+    public Ammos GetAmmos(string type)
+    {
+        int index = _ownAmmos.FindIndex(x => x.ammo.ammoName.Equals(type));
+        if (index != -1) // 존재하는 경우
+        {
+            return _ownAmmos[index];
+        }
+
+        return null;
+    }
+
+    public Items GetItems(int index)
+    {
+        if (index < _ownItems.Count && index >= 0)
+        {
+            return _ownItems[index];
+        }
+
+        return null;
+    }
+    #endregion
 
     #region AddItems
     public bool AddWeapon(WeaponData weapon)
@@ -38,6 +116,7 @@ public class PlayerInventory : MonoBehaviour
         if (!hasWeapon)
         {
             _ownWeapons.Add(weapon);
+            inventoryUI.UpdateWeaponUI();
             return true;
         }
         else
@@ -71,6 +150,7 @@ public class PlayerInventory : MonoBehaviour
         {
             _ownItems.Add(new Items(item, count));
         }
+        inventoryUI.UpdateItemUI();
     }
     #endregion
 
@@ -81,9 +161,9 @@ public class PlayerInventory : MonoBehaviour
         UpdateScrap();
     }
 
-    public void LostWeapon(WeaponData weapon) // 총 버림
+    public void LostWeapon(string type) // 총 버림
     {
-        int index = _ownWeapons.FindIndex(x => x.gunName.Equals(weapon.gunName));
+        int index = _ownWeapons.FindIndex(x => x.gunName.Equals(type));
         if (index != -1) // 존재하는 경우
         {
             _ownWeapons.RemoveAt(index);
@@ -94,9 +174,9 @@ public class PlayerInventory : MonoBehaviour
         }
     }
 
-    public void UseAmmos(AmmoData ammo, int count) // 총알 소모
+    public void UseAmmos(string type, int count) // 총알 소모
     {
-        int index = _ownAmmos.FindIndex(x => x.ammo.ammoName.Equals(ammo.ammoName));
+        int index = _ownAmmos.FindIndex(x => x.ammo.ammoName.Equals(type));
         if (index != -1) // 존재하는 경우
         {
             _ownAmmos[index].count -= count;
@@ -108,17 +188,32 @@ public class PlayerInventory : MonoBehaviour
     }
 
     // 아이템 사용
-    public void UseItems(ItemData item, int count)
+    public void UseItems(string type, int count)
     {
-        int index = _ownItems.FindIndex(x => x.item.itemName.Equals(item.itemName));
+        int index = _ownItems.FindIndex(x => x.item.itemName.Equals(type));
         if (index != -1) // 존재하는 경우
         {
-            item.Use();
+            _ownItems[index].item.Use();
             _ownItems[index].count -= count;
         }
         else // 없는 경우
         {
             Debug.Log("LostItem : 해당하는 아이템이 없습니다.");
+        }
+    }
+    #endregion
+
+    #region ExistItems
+    public bool ExistItems(string type)
+    {
+        int index = _ownItems.FindIndex(x => x.item.itemName.Equals(type));
+        if (index != -1 && _ownItems[index].count > 0) // 존재하는 경우
+        {
+            return true;
+        }
+        else // 없는 경우
+        {
+            return false;
         }
     }
     #endregion

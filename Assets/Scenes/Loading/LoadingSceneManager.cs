@@ -110,7 +110,6 @@ public class LoadingSceneManager : MonoBehaviour
         if (!isFadeIn)
         {
             gameObject.SetActive(false);
-            GameObject.Find("GameUIParent").transform.GetChild(0).gameObject.SetActive(true);
         }
     }
 

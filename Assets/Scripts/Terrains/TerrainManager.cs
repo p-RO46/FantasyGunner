@@ -65,7 +65,7 @@ public class TerrainManager : MonoBehaviour
 
     IEnumerator WaitStart()
     {
-        player.transform.position = new Vector3(0, 10, 0);
+        player.transform.position = new Vector3(0, 100, 0);
         yield return Util.WaitForSecond(1f);
         LoadingSceneManager.OnSceneLoadedSignal();
         //Destroy(gameObject);

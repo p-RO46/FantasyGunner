@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "name": "Box Controller",
+    "maps": [
+        {
+            "name": "Box interaction",
+            "id": "7e952cd6-4856-44de-9dd0-0559a154580f",
+            "actions": [
+                {
+                    "name": "Open",
+                    "type": "Button",
+                    "id": "d3635dd2-f5da-44a2-8ece-bd2e3c6b17c0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "c82335fd-4d55-4cb0-8cf0-26f789e138a7",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Open",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

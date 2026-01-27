@@ -25,6 +25,6 @@ public class CharacterData : ScriptableObject
     public float DetectAngle = 90f; // 시야각
 
     [Header("Loot Stats")]
-    public float DropCredits = 10f;
+    public int DropCredits = 10;
 
 }

@@ -5,10 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class MonsterManager : MonoBehaviour
 {
-    public TextMeshProUGUI kill;
-    public TextMeshProUGUI act;
     public List<GameObject> monsters;
 
+    public PlayerInventory pi;
     public GameObject gameUI;
 
     private int kills = 0;
@@ -49,9 +48,6 @@ public class MonsterManager : MonoBehaviour
 
                 remainMonster = monster - kills;
                 remainCS = cs - activated;
-
-                kill.text = "REMAIN MONSTERS : " + remainMonster.ToString();
-                act.text = "REMAIN CS : " + remainCS.ToString();
             }
         }
     }
@@ -70,11 +66,13 @@ public class MonsterManager : MonoBehaviour
     {
         if(m != null)
         {
-            Destroy(m);
+            int maxScraps = m.GetComponent<Monster>().monsterData.DropCredits;
+            int scraps = Random.Range(maxScraps - 5, maxScraps);
+            pi.AddScrap(scraps);
 
+            Destroy(m);
             kills++;
             remainMonster = monster - kills;
-            kill.text = "REMAIN MONSTERS : " + remainMonster;
         }
     }
 
@@ -82,7 +80,6 @@ public class MonsterManager : MonoBehaviour
     {
         activated++;
         remainCS = cs - activated;
-        act.text = "REMAIN CS : " + remainCS;
     }
 
     public void MonsterActivate()

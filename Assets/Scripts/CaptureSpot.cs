@@ -1,9 +1,11 @@
-using UnityEngine.InputSystem;
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CaptureSpot : MonoBehaviour
 {
+    private PlayerInventory pi;
+
     private MonsterManager monsterManager;
     private GameObject Player;
     private GameObject GameUI;
@@ -36,6 +38,8 @@ public class CaptureSpot : MonoBehaviour
         monsterManager = managerObject.GetComponent<MonsterManager>();
 
         audioSource = GetComponent<AudioSource>();
+
+        pi = GameObject.Find("GameManager").transform.GetChild(2).gameObject.GetComponent<PlayerInventory>();
     }
 
     public void Interactable(bool active)
@@ -44,8 +48,19 @@ public class CaptureSpot : MonoBehaviour
         if (activated) { return; }
 
         ActivateUI.SetActive(active);
-        canInteract = active;
         alreadyDetected = active;
+
+        if (active)
+        {
+            if (pi.ExistKey())
+            {
+                canInteract = true;
+            }
+            else
+            {
+                canInteract = false;
+            }
+        }
 
         //audioSource.PlayOneShot(loop);
         //Debug.Log(gameObject.name + " UI 상태: " + active);
@@ -61,6 +76,8 @@ public class CaptureSpot : MonoBehaviour
 
         if (context.started)
         {
+            pi.UseKey();
+
             Debug.Log("상호작용 완료!");
             GetComponentInParent<Animator>().SetBool("Activate", true);
             activated = true;

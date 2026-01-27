@@ -20,6 +20,7 @@ MonoBehaviour:
   Damage: 10
   MaxHP: 1000
   DeadTime: 2
+  WalkInterval: 4
   AttackObject: {fileID: 3684564457815700155, guid: 32a874af823c0a74b81a1563894d316f, type: 3}
   AttackPower: 200
   AttackTime: 2
@@ -28,3 +29,4 @@ MonoBehaviour:
   AttackRange: 15
   DetectRange: 30
   DetectAngle: 120
+  DropCredits: 30

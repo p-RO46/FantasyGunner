@@ -52,30 +52,6 @@ public class ShadowScripts : MonoBehaviour
         }
     }
 
-    /*
-    // Update is called once per frame
-    void Update()
-    {
-        Ray r = new Ray(transform.position, player.position - transform.position);
-        RaycastHit hit;
-        if (Physics.Raycast(r, out hit, 1000, shadowLayer, QueryTriggerInteraction.Collide))
-        {
-            for (int i = 0; i < vertices.Length; i++)
-            {
-                Vector3 v = shadowPlane.transform.TransformPoint(vertices[i]);
-                float distance = Vector3.SqrMagnitude(v - hit.point);
-                if (distance < radiuscircle)
-                {
-                    float alpha = Mathf.Min(colors[i].a, distance / radiuscircle);
-                    colors[i].a = alpha;
-                }
-            }
-
-            UpdateColors();
-        }
-    }
-    */
-
     public void UpdateColors()
     {
         mesh.colors = colors;

@@ -36,6 +36,7 @@ public class WalkerGenerator : MonoBehaviour
     private float TileHeight = 20;
 
     public GameObject CS;
+    public GameObject Box;
 
     private void Start()
     {
@@ -291,6 +292,14 @@ public class WalkerGenerator : MonoBehaviour
                 {
                     Instantiate(CS, tile.transform.position + CS.transform.position, Quaternion.identity);
                     monsterManager.SpawnCS();
+                }
+
+                if (gridHandler[x, y].Walkable && Random.Range(0, 30) == 0)
+                {
+                    float randomY = Random.Range(0f, 360f);
+                    Quaternion yOnlyRot = Quaternion.Euler(0, randomY, 0);
+
+                    Instantiate(Box, tile.transform.position + Box.transform.position, yOnlyRot);
                 }
             }
         }
