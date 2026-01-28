@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1771767534731092666}
   m_Layer: 4
   m_Name: WaterTile
-  m_TagString: Tile
+  m_TagString: Water
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

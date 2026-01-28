@@ -25,9 +25,10 @@ MonoBehaviour:
   fireRate: 0.1
   hasStun: 0
   stunTime: 0.5
-  fittedAmmo: {fileID: 0}
-  maxAmmo: 1000
-  loadAmmo: 100
+  shootRange: 100
+  fittedAmmo: {fileID: 11400000, guid: d214837fbf2bed64096c2811af5dfdb0, type: 2}
+  maxAmmo: 50
+  loadAmmo: 25
   reloadTime: 2
   mesh: {fileID: 4300000, guid: 70055eb82002f844bb5b57a3ef47fcfa, type: 2}
   material: {fileID: 2100000, guid: 465f56e0b8d4b8c4a9bcb9ef2bdbd5dc, type: 2}

@@ -5,6 +5,8 @@ using System.Collections;
 
 public class WeaponHandler : MonoBehaviour
 {
+    public PlayerInventory pi;
+
     //====지금까지 쏜 총알 수====//
     private int Shooted = 0;
     //=========================//
@@ -13,11 +15,12 @@ public class WeaponHandler : MonoBehaviour
     public Weapon currentWeapon;
     private WeaponData currentWeaponData;
     public Camera cam;
-    public float MaxDistance;
     public GameObject fireParticle; 
     public TextMeshProUGUI gunName;
     public TextMeshProUGUI remainAmmo;
     public TextMeshProUGUI curAmmo;
+
+    private float MaxDistance; // WeaponData 참조하는 것으로 교체
 
     public bool isReloading = false;
     public bool isReloadingbySwaping = false;
@@ -44,9 +47,15 @@ public class WeaponHandler : MonoBehaviour
 
     private void StartFiring(InputAction.CallbackContext context)
     {
+        if (currentWeapon == null)
+        {
+            Debug.Log("장착된 무기가 없습니다.");
+            return;
+        }
+
         if (!isReloading && !GetComponent<InventoryManager>().isSwapping)
         {
-            if (!currentWeapon.hasBullet || currentWeapon.loadedBullet < 1)
+            if (!currentWeapon.hasBullet() || currentWeapon.loadedBullet < 1)
             {
                 Debug.Log(currentWeaponData.gunName + ":발사불가.남은탄환없음");
                 return;
@@ -152,18 +161,20 @@ public class WeaponHandler : MonoBehaviour
             return;
         }
 
-        if (currentWeapon.remainBullet < toLoad )
+        if (currentWeapon.remainBullet < toLoad)
         {
             currentWeapon.loadedBullet += currentWeapon.remainBullet;
-            currentWeapon.remainBullet = 0;
+            pi.UseAmmos(currentWeapon.weaponData.gunName, currentWeapon.remainBullet);
+            currentWeapon.remainBullet = 0; // 다 썼음
         }
         else
         {
             currentWeapon.loadedBullet += toLoad;
+            pi.UseAmmos(currentWeapon.weaponData.gunName, toLoad);
             currentWeapon.remainBullet -= toLoad;
         }
-        remainAmmo.text = currentWeapon.remainBullet.ToString();
-        curAmmo.text = currentWeapon.loadedBullet.ToString();
+        UpdateRemainAmmos();
+        UpdateCurrentAmmos();
     }
 
     public void GunReload(InputAction.CallbackContext context)
@@ -217,7 +228,7 @@ public class WeaponHandler : MonoBehaviour
         }
         else
         {
-            currentWeapon.hasBullet = false;
+            //currentWeapon.hasBullet = false;
             Debug.Log(currentWeaponData.gunName + ":재장전불가.남은탄환없음");
             yield return null;
         }
@@ -241,15 +252,33 @@ public class WeaponHandler : MonoBehaviour
 
         currentWeapon = w;
         currentWeaponData = currentWeapon.weaponData;
+        MaxDistance = currentWeaponData.shootRange;
+
         gunName.text = currentWeaponData.gunName;
         remainAmmo.text = currentWeapon.remainBullet.ToString();
         curAmmo.text = currentWeapon.loadedBullet.ToString();
+
         if(currentWeapon.loadedBullet == 0 && currentWeapon.remainBullet > 0)
         {
             GetComponent<InventoryManager>().isSwapping = false;
             isReloadingbySwaping = true;
             Debug.Log("총 교체 취소, 장전 시작합니다.");
             reloadCoroutine = StartCoroutine(WaitForEndOfReload());
+        }
+    }
+
+    public void UpdateRemainAmmos()
+    {
+        if(remainAmmo.IsActive())
+        {
+            remainAmmo.text = currentWeapon.remainBullet.ToString();
+        }
+    }
+    public void UpdateCurrentAmmos()
+    {
+        if(curAmmo.IsActive())
+        {
+            curAmmo.text = currentWeapon.loadedBullet.ToString();
         }
     }
 

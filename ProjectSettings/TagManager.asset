@@ -25,7 +25,7 @@ TagManager:
   - Minimap Layer
   - Tile
   - TileObject
-  - 
+  - Boxdetect
   - 
   - Player
   - Minimap Icon

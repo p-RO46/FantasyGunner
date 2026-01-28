@@ -5,7 +5,8 @@ using UnityEngine.InputSystem;
 
 public class InventoryManager : MonoBehaviour
 {
-    public List<WeaponData> weapondatas;
+    public PlayerInventory pi;
+
     public Weapon currentWeapon;
     public GameObject weapon;
     public List<Weapon> weaponInventory;
@@ -23,15 +24,16 @@ public class InventoryManager : MonoBehaviour
     {
         handler = GetComponent<WeaponHandler>();
         weaponInventory = new List<Weapon>();
-        foreach(WeaponData w in weapondatas)
+        for(int i = 0; i < pi.w_size; i++)
         {
-            weaponInventory.Add(new Weapon(w));
+            Weapon w = new Weapon(pi.GetWeapons(i));
+            weaponInventory.Add(w);
+            pi.AddObserver(w);
         }
         SwapWeapon(1); // default:pistol
         initializer = false;
     }
 
-    // 1:pistol 2:smg 3:ar 4:sg 5:sr
     public void SwapWeapon(int n)
     {
         if (handler.isShooting)
@@ -42,7 +44,7 @@ public class InventoryManager : MonoBehaviour
 
         if(weaponInventory.Count >= n && n > 0)
         {
-            if(!initializer && weaponInventory[n - 1].weaponData.gunName.Equals(currentWeapon.weaponData.gunName))
+            if(!initializer && weaponInventory[n - 1].weaponData.Equals(currentWeapon.weaponData))
             {
                 //Debug.Log("이미 장착 중인 총입니다. 교체를 취소합니다.");
                 return;
@@ -77,7 +79,7 @@ public class InventoryManager : MonoBehaviour
         }
         else
         {
-            //Debug.Log("인자가 인벤토리 범위를 벗어납니다. 교체 불가");
+            Debug.Log("인자가 인벤토리 범위를 벗어납니다. 교체 불가");
         }
     }
 
@@ -96,5 +98,17 @@ public class InventoryManager : MonoBehaviour
         yield return Util.WaitForSecond(currentWeapon.weaponData.equipTime);
         isSwapping = false;
         //Debug.Log("교체 끝");
+    }
+
+    public void AddWeapon(WeaponData wData)
+    {
+        Weapon w = new Weapon(wData);
+        weaponInventory.Add(w);
+        pi.AddObserver(w);
+    }
+
+    public void UpdateRemainAmmos()
+    {
+        handler.UpdateRemainAmmos();
     }
 }

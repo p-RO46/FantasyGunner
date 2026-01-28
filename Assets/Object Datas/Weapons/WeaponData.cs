@@ -23,6 +23,7 @@ public class WeaponData : ScriptableObject
     public float fireRate;
     public bool hasStun;
     public float stunTime;
+    public float shootRange;
 
     [Header("Ammo Settings")]
     public AmmoData fittedAmmo;

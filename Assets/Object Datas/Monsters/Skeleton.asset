@@ -27,5 +27,6 @@ MonoBehaviour:
   HasStun: 1
   StunTime: 1
   AttackRange: 20
-  DetectRange: 30
+  DetectRange: 40
   DetectAngle: 120
+  DropCredits: 10

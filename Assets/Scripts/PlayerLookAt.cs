@@ -6,7 +6,6 @@ public class PlayerLookAt : MonoBehaviour
     public float range = 10f;
     private bool isNearObject = false;
 
-    public Camera cam;
     private CaptureSpot NearCS = null;
 
     private void OnTriggerEnter(Collider other)
@@ -40,9 +39,11 @@ public class PlayerLookAt : MonoBehaviour
         {
             Ray ray = new Ray(transform.position, transform.forward);
             RaycastHit hit;
-            int layerMask = ~(1 << LayerMask.NameToLayer("CSdetect"));
 
-            if (Physics.Raycast(ray, out hit, range, layerMask))
+            int csMask = ~(1 << LayerMask.NameToLayer("CSdetect"));
+            int boxMask = ~(1 << LayerMask.NameToLayer("Boxdetect"));
+
+            if (Physics.Raycast(ray, out hit, range, csMask))
             {
                 // 현재 맞춘 타겟이 가지고 있는 스크립트를 가져옴
                 CaptureSpot target = hit.collider.GetComponent<CaptureSpot>();

@@ -1,62 +1,34 @@
-using System.Collections.Generic;
-using TMPro;
+using System.Numerics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MonsterManager : MonoBehaviour
 {
-    public List<GameObject> monsters;
-
+    public GameManager gameManager;
+    public MissionManager missionManager;
     public PlayerInventory pi;
     public GameObject gameUI;
 
-    private int kills = 0;
-    private int activated = 0;
-    private int monster = 0;
-    private int cs = 0;
+    public int golems = 0;
+    public int skeletons = 0;
+    public int cs = 0;
+    public int resque = 0;
 
-    private int remainMonster = 0;
-    private int remainCS = 0;
+    public int kills = 0;
+    public int activated = 0;
 
-    private bool complete = false;
-    private bool gameStarted = false;
-
-    public string gameClear;
-
-    void Start()
+    public void SpawnMonster(TerrainData data)
     {
-        monsters = new List<GameObject>();
-    }
-
-    private void Update()
-    {
-        if (gameStarted)
+        if (data.Type.Equals("Ground"))
         {
-            if (monster == kills && cs == activated)
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-
-                SceneManager.LoadScene(gameClear);
-            }
+            golems++;
         }
-        else
+        else //if(data.CharacterName.Equals("Skeleton"))
         {
-            if (complete)
-            {
-                gameStarted = true;
-
-                remainMonster = monster - kills;
-                remainCS = cs - activated;
-            }
+            skeletons++;
         }
     }
 
-    public void SpawnMonster()
-    {
-        //monsters.Add(m);
-        monster++;
-    }
     public void SpawnCS()
     {
         cs++;
@@ -66,30 +38,42 @@ public class MonsterManager : MonoBehaviour
     {
         if(m != null)
         {
-            int maxScraps = m.GetComponent<Monster>().monsterData.DropCredits;
+            CharacterData data = m.GetComponent<Monster>().monsterData;
+            int maxScraps = data.DropCredits;
             int scraps = Random.Range(maxScraps - 5, maxScraps);
             pi.AddScrap(scraps);
 
+            if (data.CharacterName.Equals("Golem"))
+            {
+                missionManager.UpdateProgresses(MissionType.GOLEM);
+            }
+            else if (data.CharacterName.Equals("Skeleton"))
+            {
+                missionManager.UpdateProgresses(MissionType.SKEL);
+            }
+
             Destroy(m);
             kills++;
-            remainMonster = monster - kills;
         }
     }
 
     public void AddActivation()
     {
         activated++;
-        remainCS = cs - activated;
+        missionManager.UpdateProgresses(MissionType.CS);
     }
 
     public void MonsterActivate()
     {
         foreach (Transform child in transform)
         {
-            MonsterMove m = child.gameObject.GetComponent<MonsterMove>();
-            m.InitState();
-            m.ToWalk();
+            foreach(Transform monster in child)
+            {
+                MonsterMove m = monster.gameObject.GetComponent<MonsterMove>();
+                m.InitState();
+                m.ToWalk();
+            }
         }
-        complete = true;
+        gameManager.complete = true;
     }
 }

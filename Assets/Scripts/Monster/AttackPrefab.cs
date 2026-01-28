@@ -7,7 +7,6 @@ public class AttackPrefab : MonoBehaviour
     private Vector3 direction = Vector3.zero;
     private int damage;
     private Rigidbody rigid;
-    CharacterData monster;
 
     public int speed = 10; //예비용
 
@@ -50,17 +49,17 @@ public class AttackPrefab : MonoBehaviour
         {
             GameObject player = collision.gameObject;
             player.GetComponent<PlayerController>().changeHP(damage);
-            Debug.Log("적과 부딪혔다!");
+            //Debug.Log("적과 부딪혔다!");
             Destroy(gameObject);
         }
         if (collision.gameObject.CompareTag("Tile"))
         {
-            Debug.Log("바닥에 부딪혔다!");
+            //Debug.Log("바닥에 부딪혔다!");
             Destroy(gameObject);
         }
         if (collision.gameObject.CompareTag("Obstacle"))
         {
-            Debug.Log("장애물에 부딪혔다!");
+            //Debug.Log("장애물에 부딪혔다!");
             Destroy(gameObject);
         }
     }

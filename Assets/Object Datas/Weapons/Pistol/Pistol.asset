@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Pistol
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
   gunName: Pistol
-  damage: 100
+  damage: 50
   equipTime: 1
   scrapPrice: 0
   icon: {fileID: 21300000, guid: 43e51808b06720c4f917214843e295ab, type: 3}
@@ -25,8 +25,9 @@ MonoBehaviour:
   fireRate: 0
   hasStun: 1
   stunTime: 0.5
-  fittedAmmo: {fileID: 0}
-  maxAmmo: 25
+  shootRange: 50
+  fittedAmmo: {fileID: 11400000, guid: ed7f4f72b280dcc4584212b81461aea4, type: 2}
+  maxAmmo: 24
   loadAmmo: 8
   reloadTime: 2
   mesh: {fileID: 4300000, guid: 3b85cfa77783fb34bbdd13f9ba1ebe8a, type: 2}

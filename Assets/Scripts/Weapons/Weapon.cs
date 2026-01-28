@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[System.Serializable]
 public class Weapon
 {
     public Weapon(WeaponData w)
@@ -8,14 +9,16 @@ public class Weapon
         _maximumBullet = w.maxAmmo;
         _loadedBullet = w.loadAmmo;
         _remainBullet = _maximumBullet - _loadedBullet;
-        hasBullet = true;
     }
 
-    private WeaponData _weaponData;
-    private int _maximumBullet;
+    public WeaponData _weaponData;
+    private int _maximumBullet; // 총 살때 기본으로 들어있는 총알
     private int _remainBullet;
     private int _loadedBullet;
-    public bool hasBullet { get; set; }
+    public bool hasBullet()
+    {
+        return _remainBullet + _loadedBullet > 0;
+    }
 
     public WeaponData weaponData
     {

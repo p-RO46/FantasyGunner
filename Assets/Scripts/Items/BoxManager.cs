@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BoxManager : MonoBehaviour
 {
-    public Transform player;
+    public BoxRaycast boxRaycast;
     private GameObject GameUI;
     private GameObject BoxUI;
 
@@ -21,8 +21,6 @@ public class BoxManager : MonoBehaviour
     private bool canOpen = false;
     private int count = 1;
 
-    private Quaternion fixedRotation;
-
     private void Start()
     {
         anim = GetComponent<Animator>();
@@ -36,8 +34,7 @@ public class BoxManager : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            BoxUI.SetActive(true);
-            canOpen = true;
+            boxRaycast.nearPlayer = true;
         }
     }
 
@@ -45,8 +42,15 @@ public class BoxManager : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            BoxUI.SetActive(false);
-            canOpen = false;
+            boxRaycast.nearPlayer = false;
+        }
+    }
+    public void CanOpen(bool b)
+    {
+        if (!isOpen)
+        {
+            BoxUI.SetActive(b);
+            canOpen = b;
         }
     }
 
@@ -86,7 +90,7 @@ public class BoxManager : MonoBehaviour
 
     IEnumerator DisappearItem()
     {
-        yield return Util.WaitForSecond(2f);
+        yield return Util.WaitForSecond(3f);
         Destroy(transform.GetChild(1).gameObject);
     }
 }

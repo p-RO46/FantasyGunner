@@ -10,6 +10,7 @@ public class MonsterState
     }
 
     public GameObject monster;
+    public FootstepSound playerState;
 
     protected MonsterManager monsterManager;
     protected MonsterMove monsterMove; // 상태 객체를 가질 컴포넌트
@@ -35,6 +36,9 @@ public class MonsterState
     {
         this.monster = monster;
 
+        // Really Dumb Code
+        playerState = GameObject.FindWithTag("Player").transform.GetChild(2).gameObject.GetComponent<FootstepSound>();
+
         monsterManager = GameObject.Find("MonsterManager").GetComponent<MonsterManager>();
         monsterMove = monster.GetComponent<MonsterMove>();
         agent = monster.GetComponent<NavMeshAgent>();
@@ -57,15 +61,45 @@ public class MonsterState
     }
     protected void DetectPlayer()
     {
+        float detect = detectRange;
+        if (playerState.isCrouching)
+        {
+            detect /= 2;
+        }
+        else if (playerState.isRunning)
+        {
+            detect *= 1.5f;
+        }
+
         Vector3 direction = player - monster.transform.position;
         //플레이어 감지 시 상태변화
 
-        if (direction.sqrMagnitude <= attackRange * attackRange)
+        if (Vector3.Dot(monster.transform.forward, direction.normalized) >= angleCos &&
+            (direction.sqrMagnitude <= attackRange * attackRange))
         {
             monsterMove.ToAttack();
         }
-        else if ((Vector3.Dot(monster.transform.forward, direction.normalized) >= angleCos
-            && direction.sqrMagnitude <= detectRange * detectRange))
+        else if (direction.sqrMagnitude <= detect * detect)
+        {
+            monsterMove.ToFollow();
+        }
+        else
+        {
+            monsterMove.ToWalk();
+        }
+    }
+
+    protected void DetectPlayer_Attack()
+    {
+        Vector3 direction = player - monster.transform.position;
+        //플레이어 감지 시 상태변화
+
+        if (Vector3.Dot(monster.transform.forward, direction.normalized) >= angleCos &&
+            (direction.sqrMagnitude <= attackRange * attackRange))
+        {
+            monsterMove.ToAttack();
+        }
+        else
         {
             monsterMove.ToFollow();
         }

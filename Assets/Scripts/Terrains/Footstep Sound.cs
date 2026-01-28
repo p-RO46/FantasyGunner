@@ -12,7 +12,6 @@ public class FootstepSound : MonoBehaviour
     public float crouchPeriod = 0.1f;
 
     private TerrainSetting ts;
-    private Coroutine footCoroutine;
 
     public bool isMoving, isRunning, isCrouching, isJumping; 
 

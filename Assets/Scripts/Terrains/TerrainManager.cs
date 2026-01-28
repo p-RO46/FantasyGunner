@@ -1,11 +1,16 @@
 using System.Collections;
-using UnityEngine;
+using System.Collections.Generic;
 using Unity.AI.Navigation;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 public class TerrainManager : MonoBehaviour
 {
     public GameObject player;
     public NavMeshSurface surface;
+
+    public GameObject CS;
+    public GameObject Box;
 
     private WalkerGenerator wg;
     private GameObject[,] mapTiles;
@@ -13,14 +18,20 @@ public class TerrainManager : MonoBehaviour
 
     #region Terrain Setting Variables
 
-    public Transform mapObjectParent;
-    public Transform monsterManagerTransform;
+    public Transform objectParent;
+    public Transform csParent;
+    public Transform boxParent;
 
-    private MonsterManager monsterManager;
+    public Transform golemParent;
+    public Transform skeletonParent;
+    public MonsterManager monsterManager;
+
     private TerrainData data;
     private Transform tileTransform;
     private int objectSpawnChance;
     private int monsterSpawnChance = 10;
+
+    public int CSCount = 5; //cs 개수는 정해놓자.
 
     #endregion
 
@@ -28,8 +39,6 @@ public class TerrainManager : MonoBehaviour
     {
         wg = GetComponent<WalkerGenerator>();
         mapTiles = new GameObject[wg.MapWidth, wg.MapHeight];
-
-        monsterManager = monsterManagerTransform.gameObject.GetComponent<MonsterManager>();
     }
 
     private void Update()
@@ -37,6 +46,7 @@ public class TerrainManager : MonoBehaviour
         if (_settingComplete)
         {
             surface.BuildNavMesh();
+            SpawnCSAndBox();
 
             foreach (GameObject t in mapTiles)
             {
@@ -85,7 +95,7 @@ public class TerrainManager : MonoBehaviour
                     float y = 0;
 
                     float rotation = Random.Range(0.0f, 180.0f);
-                    Instantiate(i, new Vector3(x, y, z) + tileTransform.position, Quaternion.Euler(0, rotation, 0), mapObjectParent);
+                    Instantiate(i, new Vector3(x, y, z) + tileTransform.position, Quaternion.Euler(0, rotation, 0), objectParent);
                 }
             }
         }
@@ -100,7 +110,7 @@ public class TerrainManager : MonoBehaviour
                 float y = 0;
 
                 float rotation = Random.Range(0.0f, 180.0f);
-                GameObject tree = Instantiate(i, new Vector3(x, y, z) + tileTransform.position, Quaternion.Euler(0, rotation, 0), mapObjectParent);
+                GameObject tree = Instantiate(i, new Vector3(x, y, z) + tileTransform.position, Quaternion.Euler(0, rotation, 0), objectParent);
 
                 float scale = Random.Range(0.5f, 1.5f);
                 tree.transform.localScale = new Vector3(scale, scale, scale);
@@ -110,6 +120,19 @@ public class TerrainManager : MonoBehaviour
 
     public void SpawnMonsters()
     {
+        string type = data.Type;
+        Transform monsterParent;
+
+        // 나중에 열거형으로 바꾸자
+        if (type.Equals("Golem"))
+        {
+            monsterParent = golemParent;
+        }
+        else //if (type.Equals("Skeleton"))
+        {
+            monsterParent = skeletonParent;
+        }
+
         for (int i = 0; i < data.Difficulty; i++)
         {
             if (Random.Range(0, monsterSpawnChance) == 0)
@@ -121,9 +144,68 @@ public class TerrainManager : MonoBehaviour
                 else { y = 0; }
 
                 float rotation = Random.Range(0.0f, 180.0f);
-                Instantiate(data.SpawnMonster, new Vector3(x, y, z) + tileTransform.position, Quaternion.Euler(0, rotation, 0), monsterManagerTransform);
-                monsterManager.SpawnMonster();
+                Instantiate(data.SpawnMonster, new Vector3(x, y, z) + tileTransform.position, Quaternion.Euler(0, rotation, 0), monsterParent);
+                
+                monsterManager.SpawnMonster(data);
             }
+        }
+    }
+
+    void SpawnCS(int x, int y)
+    {
+        Instantiate(CS, mapTiles[x, y].transform.position + CS.transform.position, Quaternion.identity, csParent);
+        monsterManager.SpawnCS();
+    }
+    void SpawnBoxes(int x, int y)
+    {
+        float randomY = Random.Range(0f, 360f);
+        Quaternion yOnlyRot = Quaternion.Euler(0, randomY, 0);
+
+        Instantiate(Box, mapTiles[x, y].transform.position + Box.transform.position, yOnlyRot, boxParent);
+    }
+
+    void SpawnCSAndBox()
+    {
+        int row = mapTiles.GetLength(0);
+        int col = mapTiles.GetLength(1);
+
+        // 1. 모든 가능한 좌표를 리스트에 담기
+        List<Vector2Int> allCoords = new List<Vector2Int>();
+        for (int i = 0; i < row; i++)
+        {
+            for (int j = 0; j < col; j++)
+            {
+                data = mapTiles[i, j].GetComponent<TerrainSetting>().terrainData;
+                if (data.Walkable)
+                {
+                    allCoords.Add(new Vector2Int(i, j));
+                }
+            }
+        }
+
+        // 2. 피셔-예이츠 셔플(Fisher-Yates Shuffle)로 리스트 섞기
+        for (int i = 0; i < allCoords.Count; i++)
+        {
+            int randomIndex = Random.Range(i, allCoords.Count);
+            Vector2Int temp = allCoords[i];
+            allCoords[i] = allCoords[randomIndex];
+            allCoords[randomIndex] = temp;
+        }
+
+        if(allCoords.Count < CSCount * 2)
+        {
+            CSCount = allCoords.Count / 2;
+        }
+
+        // 3. 앞의 10개만 사용하기
+        for (int i = 0; i < CSCount; i++)
+        {
+            SpawnCS(allCoords[i].x, allCoords[i].y);
+        }
+
+        for (int i = CSCount; i < CSCount * 2; i++)
+        {
+            SpawnBoxes(allCoords[i].x, allCoords[i].y);
         }
     }
 }

@@ -40,7 +40,7 @@ public class AttackState : MonsterState
 
         if (attackTimeLastUpdate >= data.AttackTime)
         {
-            DetectPlayer();
+            DetectPlayer_Attack();
             if (!isSuccessive) // FollowÀÎ °æ¿ì
             {
                 return;
