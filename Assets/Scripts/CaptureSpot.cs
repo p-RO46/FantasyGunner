@@ -39,7 +39,7 @@ public class CaptureSpot : MonoBehaviour
 
         audioSource = GetComponent<AudioSource>();
 
-        pi = GameObject.Find("GameManager").transform.GetChild(2).gameObject.GetComponent<PlayerInventory>();
+        pi = GameObject.Find("GameManager").transform.GetChild(0).gameObject.GetComponent<PlayerInventory>();
     }
 
     public void Interactable(bool active)

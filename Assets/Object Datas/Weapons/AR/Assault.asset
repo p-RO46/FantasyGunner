@@ -24,7 +24,7 @@ MonoBehaviour:
   accuracy: 98.99
   fireRate: 0.1
   hasStun: 0
-  stunTime: 0.5
+  stunTime: 0.1
   shootRange: 100
   fittedAmmo: {fileID: 11400000, guid: d214837fbf2bed64096c2811af5dfdb0, type: 2}
   maxAmmo: 50

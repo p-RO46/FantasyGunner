@@ -5,7 +5,8 @@ using System.Collections;
 
 public class WeaponHandler : MonoBehaviour
 {
-    public PlayerInventory pi;
+    private PlayerInventory pi;
+    private InventoryManager im;
 
     //====지금까지 쏜 총알 수====//
     private int Shooted = 0;
@@ -39,10 +40,22 @@ public class WeaponHandler : MonoBehaviour
 
     void Awake()
     {
+        pi = GameObject.Find("GameManager").transform.GetChild(0).gameObject.GetComponent<PlayerInventory>();
+        im = GetComponent<InventoryManager>();
         shootAction = ipa.FindActionMap("GamePlay").FindAction("Shoot");
+        audioSource = GetComponent<AudioSource>();
+    }
+    void OnEnable()
+    {
         shootAction.started += StartFiring;
         shootAction.canceled += StopFiring;
-        audioSource = GetComponent<AudioSource>();
+        shootAction.Enable();
+    }
+    void OnDisable()
+    {
+        shootAction.started -= StartFiring;
+        shootAction.canceled -= StopFiring;
+        shootAction.Disable();
     }
 
     private void StartFiring(InputAction.CallbackContext context)
@@ -53,7 +66,7 @@ public class WeaponHandler : MonoBehaviour
             return;
         }
 
-        if (!isReloading && !GetComponent<InventoryManager>().isSwapping)
+        if (!isReloading && !im.isSwapping)
         {
             if (!currentWeapon.hasBullet() || currentWeapon.loadedBullet < 1)
             {
@@ -125,18 +138,6 @@ public class WeaponHandler : MonoBehaviour
         GunRecoil();
         Shooted ++;
         Debug.DrawRay(ray.origin, ray.direction * MaxDistance, Color.red, 1.0f);
-    }
-
-    private void OnEnable()
-    {
-        shootAction.Enable(); // Enable the action when the script is enabled
-    }
-
-    private void OnDisable()
-    {
-        shootAction.Disable(); // Disable the action when the script is disabled
-        shootAction.started -= StartFiring;
-        shootAction.canceled -= StopFiring;
     }
 
     private IEnumerator AutoShooting()

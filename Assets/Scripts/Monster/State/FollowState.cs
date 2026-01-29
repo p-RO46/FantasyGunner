@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FollowState : MonsterState
 {
-    private float forgetTime = 3f;
+    private float forgetTime = 5f;
     public FollowState(GameObject monster) : base(monster)
     {
         dest = new Vector3();

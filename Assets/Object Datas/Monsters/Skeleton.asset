@@ -18,13 +18,13 @@ MonoBehaviour:
   RunSpeed: 10.5
   RotationSpeed: 3
   Damage: 10
-  MaxHP: 100
+  MaxHP: 200
   DeadTime: 2
   WalkInterval: 4
   AttackObject: {fileID: 3684564457815700155, guid: 4307b680b2288474e90ddcb71f2857f9, type: 3}
   AttackPower: 10
   AttackTime: 2
-  HasStun: 1
+  HasStun: 0
   StunTime: 1
   AttackRange: 20
   DetectRange: 40

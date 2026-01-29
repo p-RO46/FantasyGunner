@@ -62,7 +62,7 @@ public class FootstepSound : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Tile"))
         {
-            if (isJumping)
+            if (isJumping && ts.terrainData.JumpLand != null)
             {
                 sounds = new List<AudioClip>(ts.terrainData.JumpLand);
                 StopAllCoroutines();
@@ -75,7 +75,7 @@ public class FootstepSound : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Tile"))
         {
-            if (isJumping)
+            if (isJumping && ts.terrainData.JumpStart != null)
             {
                 sounds = new List<AudioClip>(ts.terrainData.JumpStart);
                 StopAllCoroutines();

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerInventory : MonoBehaviour
 {
@@ -16,12 +17,9 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField]
     private Items _ownKeys;
 
-    public InventoryManager im; // 플레이어가 들고 있는 무기를 swap 하는 코드... 엉망진창
-    // 애초에 종류별로 클래스를 하나씩 만들었어야 하나? 싶기도
-
-    public TextMeshProUGUI scrapText;
-    public TextMeshProUGUI keyText;
-    public InventoryUI inventoryUI;
+    private TextMeshProUGUI scrapText;
+    private TextMeshProUGUI keyText;
+    private InventoryUI inventoryUI;
 
     public ItemData key; // 열쇠 데이터는 특별하게 다룬다...
 
@@ -30,24 +28,18 @@ public class PlayerInventory : MonoBehaviour
     public int i_size;
 
     private List<Weapon> _observers;
-
-    private void Start()
-    {
-        _ownKeys = new Items(key, 0);
-        _observers = new List<Weapon>();
-
-        w_size = _ownWeapons.Count;
-        a_size = _ownAmmos.Count;
-        i_size = _ownItems.Count;
-
-        UpdateScrap();
-    }
+    private List<Items> _observers_item;
+    private InventoryManager im;
 
     #region Observer
     public void AddObserver(Weapon w)
     {
         _observers.Add(w);
         AddAmmos(w.weaponData.fittedAmmo, w.remainBullet);
+    }
+    public void ClearObserver()
+    {
+        _observers = new List<Weapon>();
     }
     void noticeToWeapons()
     {
@@ -260,6 +252,26 @@ public class PlayerInventory : MonoBehaviour
             Debug.Log("UseItem : 해당하는 아이템이 없습니다.");
         }
     }
+
+    public void UseItems(int index, int count)
+    {
+        if (index > -1 && index < i_size) // 존재하는 경우
+        {
+            _ownItems[index].item.Use();
+            _ownItems[index].count -= count;
+
+            if (_ownItems[index].count <= 0)
+            {
+                _ownItems.RemoveAt(index);
+                i_size = _ownItems.Count;
+            }
+            inventoryUI.UpdateItemUI();
+        }
+        else // 없는 경우
+        {
+            Debug.Log("UseItem : 해당하는 아이템이 없습니다.");
+        }
+    }
     #endregion
 
     #region ExistItems
@@ -269,4 +281,58 @@ public class PlayerInventory : MonoBehaviour
         return index != -1 && _ownItems[index].count > 0;
     }
     #endregion
+
+    void OnEnable()
+    {
+        // 씬 로드 이벤트에 함수 등록
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        // 오브젝트가 파괴될 때 이벤트 해제 (메모리 누수 방지)
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    // 씬이 로드될 때마다 호출될 함수
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "FantasyGunner")
+        {
+            //Debug.Log(scene.name + " 진입: 초기화를 시작합니다.");
+            ReInitialize();
+        }
+    }
+    void ReInitialize()
+    {
+        _ownKeys = new Items(key, 0);
+        _observers = new List<Weapon>();
+        _observers_item = new List<Items>();
+
+        w_size = _ownWeapons.Count;
+        a_size = _ownAmmos.Count;
+        i_size = _ownItems.Count;
+    }
+
+    public void Notice_InventoryManager(InventoryManager inventoryManager)
+    {
+        im = inventoryManager;
+    }
+
+    public void Notice_ScrapText(TextMeshProUGUI scrapText)
+    {
+        this.scrapText = scrapText;
+        UpdateScrap();
+    }
+
+    public void Notice_KeyText(TextMeshProUGUI keyText)
+    {
+        this.keyText = keyText;
+        UpdateKey();
+    }
+
+    public void Notice_InvetoryUI(InventoryUI inventoryUI)
+    {
+        this.inventoryUI = inventoryUI;
+    }
 }

@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class InventoryManager : MonoBehaviour
 {
-    public PlayerInventory pi;
+    private PlayerInventory pi;
 
     public Weapon currentWeapon;
     public GameObject weapon;
@@ -14,7 +14,14 @@ public class InventoryManager : MonoBehaviour
     public Coroutine swapCoroutine;
 
     private WeaponHandler handler;
-    private bool initializer = true; //최초 초기화용 인자. 초기화 완료 후엔 false
+    private bool initializer = true; // 최초 초기화용 인자. 초기화 완료 후엔 false
+
+    private void Awake()
+    {
+        handler = GetComponent<WeaponHandler>();
+        pi = GameObject.Find("GameManager").transform.GetChild(0).gameObject.GetComponent<PlayerInventory>();
+        pi.Notice_InventoryManager(this);
+    }
 
     void Start()
     {
@@ -22,15 +29,17 @@ public class InventoryManager : MonoBehaviour
     }
     void init()
     {
-        handler = GetComponent<WeaponHandler>();
         weaponInventory = new List<Weapon>();
-        for(int i = 0; i < pi.w_size; i++)
+
+        pi.ClearObserver();
+        for (int i = 0; i < pi.w_size; i++)
         {
             Weapon w = new Weapon(pi.GetWeapons(i));
             weaponInventory.Add(w);
             pi.AddObserver(w);
         }
         SwapWeapon(1); // default:pistol
+
         initializer = false;
     }
 
@@ -110,5 +119,24 @@ public class InventoryManager : MonoBehaviour
     public void UpdateRemainAmmos()
     {
         handler.UpdateRemainAmmos();
+    }
+
+    public void UseItem(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            string keyName = context.control.name;
+
+            // f를 제거하고 남은 숫자만 파싱
+            if (keyName.StartsWith("f") && int.TryParse(keyName.Substring(1), out int fIndex))
+            {
+                UseItem(fIndex);
+            }
+        }
+    }
+
+    public void UseItem(int n)
+    {
+        pi.UseItems(n - 1, 1);
     }
 }

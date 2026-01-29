@@ -1,11 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.AI.Navigation;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class TerrainManager : MonoBehaviour
 {
+    private GameManager gameManager;
+
     public GameObject player;
     public NavMeshSurface surface;
 
@@ -31,12 +33,21 @@ public class TerrainManager : MonoBehaviour
     private int objectSpawnChance;
     private int monsterSpawnChance = 10;
 
-    public int CSCount = 5; //cs 개수는 정해놓자.
+    [SerializeField]
+    private int CSCount = 5; //cs 개수는 정해놓자.
+    private int obstacleLayer;
+    private int obstacleLayer_forMonster;
 
     #endregion
 
     private void Start()
     {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        CSCount = gameManager.stage * 4;
+
+        obstacleLayer = LayerMask.GetMask("CS") & LayerMask.GetMask("Boxdetect");
+        obstacleLayer_forMonster = obstacleLayer & LayerMask.GetMask("Obstacle");
+
         wg = GetComponent<WalkerGenerator>();
         mapTiles = new GameObject[wg.MapWidth, wg.MapHeight];
     }
@@ -75,7 +86,6 @@ public class TerrainManager : MonoBehaviour
 
     IEnumerator WaitStart()
     {
-        player.transform.position = new Vector3(0, 100, 0);
         yield return Util.WaitForSecond(1f);
         LoadingSceneManager.OnSceneLoadedSignal();
         //Destroy(gameObject);
@@ -85,35 +95,59 @@ public class TerrainManager : MonoBehaviour
     {
         for (int j = 0; j < 3; j++)
         {
-            objectSpawnChance = 2;
+            objectSpawnChance = 1;
             foreach (GameObject i in data.ObjectList1)
             {
-                if (Random.Range(0, objectSpawnChance++) == 0)
+                if (UnityEngine.Random.Range(0, objectSpawnChance++) == 0)
                 {
-                    float x = Random.Range(tileTransform.localScale.x * (-5), tileTransform.localScale.x * 5);
-                    float z = Random.Range(tileTransform.localScale.z * (-5), tileTransform.localScale.z * 5);
+                    float x = UnityEngine.Random.Range(tileTransform.localScale.x * (-5), tileTransform.localScale.x * 5);
+                    float z = UnityEngine.Random.Range(tileTransform.localScale.z * (-5), tileTransform.localScale.z * 5);
                     float y = 0;
 
-                    float rotation = Random.Range(0.0f, 180.0f);
-                    Instantiate(i, new Vector3(x, y, z) + tileTransform.position, Quaternion.Euler(0, rotation, 0), objectParent);
+                    for(int k = 0; k < 100; k++)
+                    {
+                        if(CanBuild(x, z))
+                        {
+                            float rotation = UnityEngine.Random.Range(0.0f, 180.0f);
+                            Instantiate(i, new Vector3(x, y, z) + tileTransform.position, Quaternion.Euler(0, rotation, 0), objectParent);
+                            break;
+                        }
+                        else
+                        {
+                            x = UnityEngine.Random.Range(tileTransform.localScale.x * (-5), tileTransform.localScale.x * 5);
+                            z = UnityEngine.Random.Range(tileTransform.localScale.z * (-5), tileTransform.localScale.z * 5);
+                        }
+                    }
                 }
             }
         }
 
-        objectSpawnChance = 3;
+        objectSpawnChance = 2;
         foreach (GameObject i in data.ObjectList2)
         {
-            if (Random.Range(0, objectSpawnChance++) == 0)
+            if (UnityEngine.Random.Range(0, objectSpawnChance++) == 0)
             {
-                float x = Random.Range(tileTransform.localScale.x * (-5), tileTransform.localScale.x * 5);
-                float z = Random.Range(tileTransform.localScale.z * (-5), tileTransform.localScale.z * 5);
+                float x = UnityEngine.Random.Range(tileTransform.localScale.x * (-5), tileTransform.localScale.x * 5);
+                float z = UnityEngine.Random.Range(tileTransform.localScale.z * (-5), tileTransform.localScale.z * 5);
                 float y = 0;
 
-                float rotation = Random.Range(0.0f, 180.0f);
-                GameObject tree = Instantiate(i, new Vector3(x, y, z) + tileTransform.position, Quaternion.Euler(0, rotation, 0), objectParent);
+                for (int k = 0; k < 100; k++)
+                {
+                    if (CanBuild(x, z))
+                    {
+                        float rotation = UnityEngine.Random.Range(0.0f, 180.0f);
+                        GameObject tree = Instantiate(i, new Vector3(x, y, z) + tileTransform.position, Quaternion.Euler(0, rotation, 0), objectParent);
 
-                float scale = Random.Range(0.5f, 1.5f);
-                tree.transform.localScale = new Vector3(scale, scale, scale);
+                        float scale = UnityEngine.Random.Range(0.5f, 1.5f);
+                        tree.transform.localScale = new Vector3(scale, scale, scale);
+                        break;
+                    }
+                    else
+                    {
+                        x = UnityEngine.Random.Range(tileTransform.localScale.x * (-5), tileTransform.localScale.x * 5);
+                        z = UnityEngine.Random.Range(tileTransform.localScale.z * (-5), tileTransform.localScale.z * 5);
+                    }
+                }
             }
         }
     }
@@ -135,16 +169,24 @@ public class TerrainManager : MonoBehaviour
 
         for (int i = 0; i < data.Difficulty; i++)
         {
-            if (Random.Range(0, monsterSpawnChance) == 0)
+            if (UnityEngine.Random.Range(0, monsterSpawnChance) == 0)
             {
-                float x = Random.Range(tileTransform.localScale.x * (-5), tileTransform.localScale.x * 5);
-                float z = Random.Range(tileTransform.localScale.x * (-5), tileTransform.localScale.z * 5);
-                float y;
-                if (data.Type.Equals("Lava")) { y = Random.Range(15.0f, 20.0f); }
-                else { y = 0; }
+                float x = UnityEngine.Random.Range(tileTransform.localScale.x * (-5), tileTransform.localScale.x * 5);
+                float z = UnityEngine.Random.Range(tileTransform.localScale.x * (-5), tileTransform.localScale.z * 5);
+                float y = 0;
+                //if (data.Type.Equals("Lava")) { y = UnityEngine.Random.Range(15.0f, 20.0f); }
+                //else { y = 0; }
 
-                float rotation = Random.Range(0.0f, 180.0f);
-                Instantiate(data.SpawnMonster, new Vector3(x, y, z) + tileTransform.position, Quaternion.Euler(0, rotation, 0), monsterParent);
+                if (CanSpawnMonster(x, z))
+                {
+                    float rotation = UnityEngine.Random.Range(0.0f, 180.0f);
+                    Instantiate(data.SpawnMonster, new Vector3(x, y, z) + tileTransform.position, Quaternion.Euler(0, rotation, 0), monsterParent);
+                }
+                else
+                {
+                    x = UnityEngine.Random.Range(tileTransform.localScale.x * (-5), tileTransform.localScale.x * 5);
+                    z = UnityEngine.Random.Range(tileTransform.localScale.z * (-5), tileTransform.localScale.z * 5);
+                }
                 
                 monsterManager.SpawnMonster(data);
             }
@@ -158,8 +200,8 @@ public class TerrainManager : MonoBehaviour
     }
     void SpawnBoxes(int x, int y)
     {
-        float randomY = Random.Range(0f, 360f);
-        Quaternion yOnlyRot = Quaternion.Euler(0, randomY, 0);
+        float RandomY = UnityEngine.Random.Range(0f, 360f);
+        Quaternion yOnlyRot = Quaternion.Euler(0, RandomY, 0);
 
         Instantiate(Box, mapTiles[x, y].transform.position + Box.transform.position, yOnlyRot, boxParent);
     }
@@ -186,7 +228,7 @@ public class TerrainManager : MonoBehaviour
         // 2. 피셔-예이츠 셔플(Fisher-Yates Shuffle)로 리스트 섞기
         for (int i = 0; i < allCoords.Count; i++)
         {
-            int randomIndex = Random.Range(i, allCoords.Count);
+            int randomIndex = UnityEngine.Random.Range(i, allCoords.Count);
             Vector2Int temp = allCoords[i];
             allCoords[i] = allCoords[randomIndex];
             allCoords[randomIndex] = temp;
@@ -198,7 +240,7 @@ public class TerrainManager : MonoBehaviour
         }
 
         // 3. 앞의 10개만 사용하기
-        for (int i = 0; i < CSCount; i++)
+        for(int i = 0; i < CSCount; i++)
         {
             SpawnCS(allCoords[i].x, allCoords[i].y);
         }
@@ -207,5 +249,25 @@ public class TerrainManager : MonoBehaviour
         {
             SpawnBoxes(allCoords[i].x, allCoords[i].y);
         }
+    }
+
+    bool CanBuild(float x, float y)
+    {
+        // 해당 위치에 'Obstacle' 레이어의 콜라이더가 있는지 확인
+        if (!Physics.CheckSphere(new Vector3(x, 0, y), 1.0f, obstacleLayer))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    bool CanSpawnMonster(float x, float y)
+    {
+        // 해당 위치에 'Obstacle' 레이어의 콜라이더가 있는지 확인
+        if (!Physics.CheckSphere(new Vector3(x, 0, y), 1.0f, obstacleLayer_forMonster))
+        {
+            return true;
+        }
+        return false;
     }
 }

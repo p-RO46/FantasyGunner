@@ -8,7 +8,6 @@ public class BoxManager : MonoBehaviour
     private GameObject GameUI;
     private GameObject BoxUI;
 
-    private GameObject supplyManager;
     private PlayerInventory pi;
 
     private Animator anim;
@@ -24,8 +23,7 @@ public class BoxManager : MonoBehaviour
     private void Start()
     {
         anim = GetComponent<Animator>();
-        supplyManager = GameObject.Find("GameManager").transform.GetChild(2).gameObject;
-        pi = supplyManager.GetComponent<PlayerInventory>();
+        pi = GameObject.Find("GameManager").transform.GetChild(0).gameObject.GetComponent<PlayerInventory>();
 
         GameUI = GameObject.Find("GameUIParent").transform.GetChild(0).gameObject;
         BoxUI = GameUI.transform.Find("BoxOpen UI").gameObject;
@@ -59,6 +57,9 @@ public class BoxManager : MonoBehaviour
         if (canOpen && !isOpen)
         {
             isOpen = true;
+
+            BoxUI.SetActive(false);
+
             anim.SetBool("isOpen", true);
             StartCoroutine(DisappearItem());
             GetKey(item);

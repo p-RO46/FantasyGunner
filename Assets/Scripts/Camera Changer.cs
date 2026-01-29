@@ -1,9 +1,11 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 
 public class CameraChanger : MonoBehaviour
 {
+    public InputActionAsset ipa;
     public GameObject player;
     public Transform parent;
 
@@ -14,6 +16,9 @@ public class CameraChanger : MonoBehaviour
 
     IEnumerator playerGo()
     {
+        ipa.FindActionMap("UI").Enable();
+        ipa.FindActionMap("GamePlay").Disable();
+
         float time = 0;
         yield return Util.WaitForSecond(5f);
 
@@ -31,6 +36,8 @@ public class CameraChanger : MonoBehaviour
         }
         player.transform.position = new Vector3(0, 20, 0);
 
+        ipa.FindActionMap("UI").Disable();
+        ipa.FindActionMap("GamePlay").Enable();
         Destroy(gameObject);
     }
 }

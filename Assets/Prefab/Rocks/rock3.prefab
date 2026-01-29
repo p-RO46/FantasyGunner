@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1622653732172500065}
   - component: {fileID: 8020786274717102106}
   - component: {fileID: 5563257940838183035}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Collider
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -83,7 +83,7 @@ GameObject:
   - component: {fileID: 542440840362611016}
   - component: {fileID: 6927114418817704994}
   - component: {fileID: 8231613650815647262}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: rock3
   m_TagString: Obstacle
   m_Icon: {fileID: 0}

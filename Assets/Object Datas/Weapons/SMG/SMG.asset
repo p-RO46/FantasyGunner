@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SMG
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
   gunName: Submachine Gun
-  damage: 1000
+  damage: 30
   equipTime: 1
   scrapPrice: 50
   icon: {fileID: 21300000, guid: 74e63449807e3ee42915c476e0cfa7d1, type: 3}
@@ -23,8 +23,8 @@ MonoBehaviour:
   horizontalForce: 100
   accuracy: 98
   fireRate: 0.05
-  hasStun: 1
-  stunTime: 0.5
+  hasStun: 0
+  stunTime: 0
   shootRange: 80
   fittedAmmo: {fileID: 11400000, guid: 73a2a5e7a30d0b7478c9c39b3bb20e91, type: 2}
   maxAmmo: 200

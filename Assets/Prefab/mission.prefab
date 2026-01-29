@@ -186,7 +186,7 @@ GameObject:
   - component: {fileID: 7085516453735151923}
   - component: {fileID: 7454528759359150669}
   m_Layer: 0
-  m_Name: Text (TMP) (2)
+  m_Name: Progress
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

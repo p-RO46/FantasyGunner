@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 193087469085699182}
   - component: {fileID: 33283257760765224}
   - component: {fileID: 23241690840828844}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Tree3
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: 5269259691851970553}
   - component: {fileID: 3901424399795155278}
   - component: {fileID: 1120201348674931233}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Collider
   m_TagString: Obstacle
   m_Icon: {fileID: 0}

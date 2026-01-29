@@ -23,8 +23,8 @@ MonoBehaviour:
   horizontalForce: 50
   accuracy: 98.99
   fireRate: 0
-  hasStun: 1
-  stunTime: 0.5
+  hasStun: 0
+  stunTime: 0
   shootRange: 50
   fittedAmmo: {fileID: 11400000, guid: ed7f4f72b280dcc4584212b81461aea4, type: 2}
   maxAmmo: 24

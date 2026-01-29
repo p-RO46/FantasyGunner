@@ -32,6 +32,8 @@ public class MonsterState
     public bool isSuccessive = false; // ToStun이 연속으로 호출된 경우.
     public float lostTimer = 0f; // Follow 용
 
+    private int obstacleMask; // layerMask
+
     public MonsterState(GameObject monster)
     {
         this.monster = monster;
@@ -50,6 +52,8 @@ public class MonsterState
         detectAngle = data.DetectRange;
 
         angleCos = Mathf.Cos(detectAngle * 0.5f * Mathf.Deg2Rad);
+
+        obstacleMask = LayerMask.GetMask("Obstacle");
     }
 
     public virtual void Action()
@@ -71,15 +75,13 @@ public class MonsterState
             detect *= 1.5f;
         }
 
-        Vector3 direction = player - monster.transform.position;
-        //플레이어 감지 시 상태변화
-
-        if (Vector3.Dot(monster.transform.forward, direction.normalized) >= angleCos &&
-            (direction.sqrMagnitude <= attackRange * attackRange))
+        if (Vector3.Distance(monster.transform.position, player) <= attackRange)
         {
             monsterMove.ToAttack();
+            return;
         }
-        else if (direction.sqrMagnitude <= detect * detect)
+
+        if (CanSeePlayer(detect))
         {
             monsterMove.ToFollow();
         }
@@ -94,14 +96,29 @@ public class MonsterState
         Vector3 direction = player - monster.transform.position;
         //플레이어 감지 시 상태변화
 
-        if (Vector3.Dot(monster.transform.forward, direction.normalized) >= angleCos &&
-            (direction.sqrMagnitude <= attackRange * attackRange))
+        if (Vector3.Distance(monster.transform.position, player) <= attackRange)
         {
             monsterMove.ToAttack();
+            return;
         }
-        else
+        monsterMove.ToFollow();
+    }
+
+    bool CanSeePlayer(float detectRange)
+    {
+        Vector3 directionToPlayer = (player - monster.transform.position).normalized;
+        float distanceToPlayer = Vector3.Distance(monster.transform.position, player);
+
+        // 1 & 2단계: 거리와 각도 확인
+        if (distanceToPlayer < detectRange && Vector3.Angle(monster.transform.forward, directionToPlayer) < detectAngle / 2f)
         {
-            monsterMove.ToFollow();
+            // 3단계: 장애물 체크 (Raycast)
+            // Obstacle 레이어에 부딪히면 플레이어를 볼 수 없는 것으로 간주
+            if (!Physics.Raycast(monster.transform.position, directionToPlayer, distanceToPlayer, obstacleMask))
+            {
+                return true; // 장애물이 없으므로 플레이어 발견!
+            }
         }
+        return false;
     }
 }

@@ -24,6 +24,14 @@ public class PlayerController : MonoBehaviour
     public GameObject GameOver;
     public GameObject GameClear;
 
+    private GameObject gameManager;
+
+    // Armor용
+    private int maxAdditionalHp = 0;
+    private int additionalHp = 0;
+    public Slider additionalHpSlider;
+    public GameObject additionalHpUI;
+
     private Animator playerAnimator;
     private InputAction moveAction;
     private InputAction runAction;
@@ -43,14 +51,24 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
+        gameManager = GameObject.Find("GameManager");
         gp = ipa.FindActionMap("GamePlay");
 
         moveAction = gp.FindAction("Move");
         runAction = gp.FindAction("Run");
         crouchAction = gp.FindAction("Crouch");
-
+    }
+    void OnEnable()
+    {
         moveAction.started += OnMove;
         moveAction.canceled += StopMove;
+        moveAction.Enable();
+    }
+    void OnDisable()
+    {
+        moveAction.started -= OnMove;
+        moveAction.canceled -= StopMove;
+        moveAction.Disable();
     }
 
     void Start()
@@ -63,11 +81,49 @@ public class PlayerController : MonoBehaviour
         curHp = maxHp;
         hpSlider.value = 1;
     }
-
+    public void Armored(int armor)
+    {
+        //추가 체력 전용 UI 연결
+        maxAdditionalHp = armor;
+        additionalHp = armor;
+        additionalHpUI.SetActive(true);
+        additionalHpSlider.value = 1;
+    }
     public void changeHP(int damage)
     {
+        if (additionalHpUI.activeSelf)
+        {
+            if(additionalHp - damage < 0)
+            {
+                additionalHpSlider.value = 0;
+                additionalHpUI.SetActive(false);
+                changeHP(damage - additionalHp);
+                return;
+            }
+            else
+            {
+                additionalHpSlider.value = (float)(additionalHp - damage) / (float)maxAdditionalHp;
+                additionalHp -= damage;
+                return;
+            }
+        }
         hpSlider.value = (float)(curHp - damage) / (float)maxHp;
         curHp -= damage;
+    }
+
+    public void healHP(int healAmount)
+    {
+        int newHp;
+        if(curHp + healAmount > maxHp)
+        {
+            newHp = maxHp;
+        }
+        else
+        {
+            newHp = curHp + healAmount;
+        }
+        hpSlider.value = (float)(newHp) / (float)maxHp;
+        curHp = newHp;
     }
     private void OnMove(InputAction.CallbackContext context)
     {
@@ -115,6 +171,8 @@ public class PlayerController : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             // 게임 오버
+
+            Destroy(gameManager);
             SceneManager.LoadScene(gameOver);
         }
 

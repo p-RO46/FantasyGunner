@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public bool missionComplete = false; // 미션 완료 여부
 
     public string gameClear;
+    public string gameComplete;
 
     public MissionManager missionManager;
 
@@ -38,16 +39,23 @@ public class GameManager : MonoBehaviour
             Cursor.visible = true;
 
             missionComplete = false;
-            SceneManager.LoadScene(gameClear);
+            stage ++;
+
+            if(stage >= 4)
+            {
+                //최종적으로 게임 끝.
+                Destroy(gameObject);
+                SceneManager.LoadScene(gameComplete);
+            }
+            else
+            {
+                SceneManager.LoadScene(gameClear);
+            }
         }
     }
 
-    void Update()
+    public void MakeMissions()
     {
-        if (complete)
-        {
-            missionManager.MakeMissions(stage);
-            complete = false;
-        }
+        missionManager.MakeMissions(stage);
     }
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6596644903720937237}
   - component: {fileID: 7297985673039058498}
   - component: {fileID: 534927896485304669}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: Collider
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -84,7 +84,7 @@ GameObject:
   - component: {fileID: 8184541651957143130}
   - component: {fileID: 6405329735278503008}
   - component: {fileID: 5756142115710343905}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: Tree1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -186,7 +186,7 @@ GameObject:
   - component: {fileID: 1321841723592256849}
   - component: {fileID: 7639417872369337522}
   - component: {fileID: 4815184861784435163}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: Collider
   m_TagString: Obstacle
   m_Icon: {fileID: 0}

@@ -13,6 +13,11 @@ public class Main_ButtonManager : MonoBehaviour
 
     public void OnMainButtonClick()
     {
+        GameObject gameManager = GameObject.Find("GameManager");
+        if(gameManager != null)
+        {
+            Destroy(gameManager);
+        }
         SceneManager.LoadScene(startScene);
     }
 

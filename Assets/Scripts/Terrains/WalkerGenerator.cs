@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class WalkerGenerator : MonoBehaviour
 {
+    private GameManager gameManager;
     private TerrainManager manager;
 
     public GameObject minimapFog;
@@ -37,6 +38,10 @@ public class WalkerGenerator : MonoBehaviour
 
     private void Start()
     {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        MapWidth = (gameManager.stage + 1) * 10;
+        MapHeight = (gameManager.stage + 1) * 12;
+
         manager = GetComponent<TerrainManager>();
         InitializeGrid();
     }

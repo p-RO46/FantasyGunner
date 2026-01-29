@@ -4,9 +4,10 @@ using UnityEngine.SceneManagement;
 
 public class MonsterManager : MonoBehaviour
 {
-    public GameManager gameManager;
-    public MissionManager missionManager;
-    public PlayerInventory pi;
+    private GameManager gameManager;
+    private MissionManager missionManager;
+    private PlayerInventory pi;
+
     public GameObject gameUI;
 
     public int golems = 0;
@@ -16,10 +17,22 @@ public class MonsterManager : MonoBehaviour
 
     public int kills = 0;
     public int activated = 0;
+    private void Awake()
+    {
+        GameObject OB_gameManager = GameObject.Find("GameManager");
+        gameManager = OB_gameManager.GetComponent<GameManager>();
+        missionManager = OB_gameManager.GetComponent<MissionManager>();
+        pi = OB_gameManager.transform.Find("SupplyManager").GetComponent<PlayerInventory>();
+    }
+
+    private void Start()
+    {
+        missionManager.Notice_MonsterManager(this);
+    }
 
     public void SpawnMonster(TerrainData data)
     {
-        if (data.Type.Equals("Ground"))
+        if (data.Type.Equals("Grass"))
         {
             golems++;
         }
@@ -74,6 +87,6 @@ public class MonsterManager : MonoBehaviour
                 m.ToWalk();
             }
         }
-        gameManager.complete = true;
+        gameManager.MakeMissions();
     }
 }
