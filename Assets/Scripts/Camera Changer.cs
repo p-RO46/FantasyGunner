@@ -22,6 +22,8 @@ public class CameraChanger : MonoBehaviour
         float time = 0;
         yield return Util.WaitForSecond(5f);
 
+        PlayerController controller = player.GetComponent<PlayerController>();
+        controller.OnJump();
         while (time < 5)
         {
             yield return null;
@@ -34,7 +36,10 @@ public class CameraChanger : MonoBehaviour
         {
             parent.GetChild(i).gameObject.SetActive(true);
         }
-        player.transform.position = new Vector3(0, 20, 0);
+
+        controller.enabled = false;
+        player.transform.position = new Vector3(0, 10, 0);
+        controller.enabled = true;
 
         ipa.FindActionMap("UI").Disable();
         ipa.FindActionMap("GamePlay").Enable();

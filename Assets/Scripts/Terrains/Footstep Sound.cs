@@ -5,6 +5,7 @@ using UnityEngine.Rendering;
 
 public class FootstepSound : MonoBehaviour
 {
+    public FootstepSounds rockSounds;
     private AudioSource audioSource;
 
     public float walkPeriod = 0.5f;
@@ -56,6 +57,28 @@ public class FootstepSound : MonoBehaviour
                 StartCoroutine(Footsteps(period));
             }
         }
+        else if (other.gameObject.CompareTag("Obstacle"))
+        {
+            if (isMoving)
+            {
+                if (isRunning)
+                {
+                    sounds = new List<AudioClip>(rockSounds.Run);
+                    period = runPeriod;
+                }
+                else
+                {
+                    sounds = new List<AudioClip>(rockSounds.Walk);
+                    period = walkPeriod;
+                }
+
+                if (isCrouching)
+                {
+                    period = crouchPeriod;
+                }
+                StartCoroutine(Footsteps(period));
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -65,6 +88,16 @@ public class FootstepSound : MonoBehaviour
             if (isJumping && ts.terrainData.JumpLand != null)
             {
                 sounds = new List<AudioClip>(ts.terrainData.JumpLand);
+                StopAllCoroutines();
+                StartCoroutine(Footsteps(period));
+                isJumping = false;
+            }
+        }
+        else if (other.gameObject.CompareTag("Obstacle"))
+        {
+            if (isJumping && ts.terrainData.JumpLand != null)
+            {
+                sounds = new List<AudioClip>(rockSounds.Land);
                 StopAllCoroutines();
                 StartCoroutine(Footsteps(period));
                 isJumping = false;
@@ -80,6 +113,16 @@ public class FootstepSound : MonoBehaviour
                 sounds = new List<AudioClip>(ts.terrainData.JumpStart);
                 StopAllCoroutines();
                 StartCoroutine(Footsteps(period));
+            }
+        }
+        else if (other.gameObject.CompareTag("Obstacle"))
+        {
+            if (isJumping && ts.terrainData.JumpLand != null)
+            {
+                sounds = new List<AudioClip>(rockSounds.Jump);
+                StopAllCoroutines();
+                StartCoroutine(Footsteps(period));
+                isJumping = false;
             }
         }
     }

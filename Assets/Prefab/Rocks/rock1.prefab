@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5272806528632134854}
   - component: {fileID: 2161080130718529593}
   - component: {fileID: 9011403758309658674}
+  - component: {fileID: 6713188464660867319}
   m_Layer: 13
   m_Name: rock1
   m_TagString: Obstacle
@@ -91,6 +92,28 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &6713188464660867319
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2278202804575289889}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 395cce1cea808a54c8df538cf4ff0a21, type: 3}
 --- !u!1 &4014667465469200127
 GameObject:
   m_ObjectHideFlags: 0
@@ -100,7 +123,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1660709835133758787}
-  - component: {fileID: 3794994965176181570}
   - component: {fileID: 8821217182851140994}
   m_Layer: 13
   m_Name: Collider
@@ -124,29 +146,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5272806528632134854}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
---- !u!136 &3794994965176181570
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4014667465469200127}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 3.7
-  m_Height: 9
-  m_Direction: 1
-  m_Center: {x: 0.3, y: -0.3, z: 0}
 --- !u!208 &8821217182851140994
 NavMeshObstacle:
   m_ObjectHideFlags: 0

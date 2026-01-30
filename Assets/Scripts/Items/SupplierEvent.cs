@@ -66,36 +66,42 @@ public class SupplierEvent : MonoBehaviour
     public void BuyPistol()
     {
         WeaponBuy = itemAll.AllWeapons[0];
+        count = 1;
         BuyWeapons();
     }
     public void BuySMG()
     {
         WeaponBuy = itemAll.AllWeapons[1];
+        count = 1;
         BuyWeapons();
     }
     public void BuyAR()
     {
         WeaponBuy = itemAll.AllWeapons[2];
+        count = 1;
         BuyWeapons();
     }
     public void BuySG()
     {
         WeaponBuy = itemAll.AllWeapons[3];
+        count = 1;
         BuyWeapons();
     }
     public void BuySR()
     {
         WeaponBuy = itemAll.AllWeapons[4];
+        count = 1;
         BuyWeapons();
     }
 
     void BuyWeapons()
     {
-        if (pi.GetScrap() >= WeaponBuy.scrapPrice * count)
+        if (pi.GetScrap() >= WeaponBuy.scrapPrice)
         {
             if (pi.AddWeapon(WeaponBuy))
             {
-                pi.UseScrap(WeaponBuy.scrapPrice * count);
+                pi.UseScrap(WeaponBuy.scrapPrice);
+                pi.AddAmmos(WeaponBuy.fittedAmmo, WeaponBuy.maxAmmo);
             }
         }
         else
@@ -109,34 +115,39 @@ public class SupplierEvent : MonoBehaviour
     public void BuyPistolAmmos()
     {
         AmmoBuy = itemAll.AllAmmos[0];
+        count = 30;
         BuyAmmos();
     }
     public void BuySMGAmmos()
     {
         AmmoBuy = itemAll.AllAmmos[1];
+        count = 50;
         BuyAmmos();
     }
     public void BuyARAmmos()
     {
         AmmoBuy = itemAll.AllAmmos[2];
+        count = 20;
         BuyAmmos();
     }
     public void BuySGAmmos()
     {
         AmmoBuy = itemAll.AllAmmos[3];
+        count = 15;
         BuyAmmos();
     }
     public void BuySRAmmos()
     {
         AmmoBuy = itemAll.AllAmmos[4];
+        count = 10;
         BuyAmmos();
     }
 
     void BuyAmmos()
     {
-        if (pi.GetScrap() >= AmmoBuy.scrapPrice * count)
+        if (pi.GetScrap() >= AmmoBuy.scrapPrice)
         {
-            pi.UseScrap(AmmoBuy.scrapPrice * count);
+            pi.UseScrap(AmmoBuy.scrapPrice);
             pi.AddAmmos(AmmoBuy, count);
         }
         else
@@ -150,19 +161,21 @@ public class SupplierEvent : MonoBehaviour
     public void BuyHealKit()
     {
         ItemBuy = itemAll.AllItems[0];
+        count = 1;
         BuyItems();
     }
     public void BuyArmor()
     {
         ItemBuy = itemAll.AllItems[1];
+        count = 1;
         BuyItems();
     }
 
     void BuyItems()
     {
-        if (pi.GetScrap() >= ItemBuy.scrapPrice * count)
+        if (pi.GetScrap() >= ItemBuy.scrapPrice)
         {
-            pi.UseScrap(ItemBuy.scrapPrice * count);
+            pi.UseScrap(ItemBuy.scrapPrice);
             pi.AddItems(ItemBuy, count);
         }
         else

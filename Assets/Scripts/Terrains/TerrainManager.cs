@@ -133,7 +133,7 @@ public class TerrainManager : MonoBehaviour
 
                 for (int k = 0; k < 100; k++)
                 {
-                    if (CanBuild(x, z))
+                    if (CanTree(x, z))
                     {
                         float rotation = UnityEngine.Random.Range(0.0f, 180.0f);
                         GameObject tree = Instantiate(i, new Vector3(x, y, z) + tileTransform.position, Quaternion.Euler(0, rotation, 0), objectParent);
@@ -252,6 +252,16 @@ public class TerrainManager : MonoBehaviour
     }
 
     bool CanBuild(float x, float y)
+    {
+        // 해당 위치에 'Obstacle' 레이어의 콜라이더가 있는지 확인
+        if (!Physics.CheckSphere(new Vector3(x, 0, y), 5.0f, obstacleLayer))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    bool CanTree(float x, float y)
     {
         // 해당 위치에 'Obstacle' 레이어의 콜라이더가 있는지 확인
         if (!Physics.CheckSphere(new Vector3(x, 0, y), 1.0f, obstacleLayer))

@@ -34,26 +34,27 @@ public class PlayerInventory : MonoBehaviour
     #region Observer
     public void AddObserver(Weapon w)
     {
-        _observers.Add(w);
-        AddAmmos(w.weaponData.fittedAmmo, w.remainBullet);
+        if (!_observers.Contains(w)) // 중복 방지 체크 추가 권장
+        {
+            _observers.Add(w);
+        }
     }
     public void ClearObserver()
     {
         _observers = new List<Weapon>();
     }
-    void noticeToWeapons()
+    void noticeToWeapons(string ammo)
     {
-        // Bullet의 사용 현황을 Weapon 객체들에게 알리는 함수
-        // 같은 총이 두 자루일 수는 없는데?
         foreach (Weapon w in _observers)
         {
-            if (w.weaponData.gunName != null)
+            if (w.weaponData.fittedAmmo.ammoName.Equals(ammo))
             {
                 w.remainBullet = GetAmmos(w.weaponData.fittedAmmo).count;
             }
         }
         im.UpdateRemainAmmos();
     }
+
     #endregion
 
     #region Key
@@ -168,7 +169,7 @@ public class PlayerInventory : MonoBehaviour
             _ownAmmos.Add(new Ammos(ammo, count));
             a_size = _ownAmmos.Count;
         }
-        noticeToWeapons();
+        noticeToWeapons(ammo.ammoName);
     }
 
     public void AddItems(ItemData item,int count)
@@ -217,7 +218,7 @@ public class PlayerInventory : MonoBehaviour
             if (_ownAmmos[index].count >= count)
             {
                 _ownAmmos[index].count -= count;
-                noticeToWeapons();
+                noticeToWeapons(type);
             }
             else
             {
